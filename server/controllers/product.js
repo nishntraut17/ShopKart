@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Product = require('../model/product');
+const Product = require('../models/products');
 
 const getAllProducts = async (req, res) => {
     try {
@@ -30,3 +30,5 @@ const createProduct = async (req, res) => {
         console.log(error);
     }
 }
+
+module.exports = { getAllProducts, getOneProduct, createProduct };
