@@ -18,8 +18,9 @@ const Signup = () => {
     const formSubmit = async (e) => {
         try {
             e.preventDefault();
-            await axios.post("http://localhost:5000/", {
-                formDetails
+            const { name, email, password } = formDetails;
+            await axios.post("http://localhost:5000/api/user/register", {
+                name, email, password
             })
         } catch (error) {
             console.log('Error', error);

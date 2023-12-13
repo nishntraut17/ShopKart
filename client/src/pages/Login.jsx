@@ -19,10 +19,11 @@ const Login = () => {
         try {
             e.preventDefault();
             const { email, password } = formDetails;
-            const { data } = await axios.post("/user/login", {
+            const { data } = await axios.post("http://localhost:5000/api/user/login", {
                 email,
                 password
             })
+            console.log(data);
             localStorage.setItem("token", data.token);
         }
         catch (error) {
