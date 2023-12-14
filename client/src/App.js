@@ -4,6 +4,7 @@ import React, { lazy, Suspense } from 'react';
 import './App.css';
 import Home from './pages/Home';
 import SingleProduct from './pages/product/SingleProduct';
+import Checkout from './pages/Cart/Checkout';
 
 const AddProduct = lazy(() => import("./components/AddProduct"));
 const Navbar = lazy(() => import("./components/Navbar"));
@@ -24,6 +25,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/addproduct' element={<AddProduct />} />
           <Route path='/:id' element={<SingleProduct />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </Suspense>
     </Router>
