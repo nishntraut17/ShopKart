@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 
 export default function Signup() {
+    const navigate = useNavigate();
+    const [file, setFile] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const [formDetails, setFormDetails] = useState({
         name: "",
         email: "",
         password: "",
     });
+
+    const onUpload = async (element) => {
+        setLoading(true);
+        if (element.type === "image/jpeg" || element.type === "image/png") {
+            const data = new FormData();
+            data.append("file", element);
+            data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
+            data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+            fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
+                method: "POST",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => setFile(data.url.toString()));
+            setLoading(false);
+        } else {
+            setLoading(false);
+        }
+    };
 
     const inputChange = (e) => {
         const { name, value } = e.target;
@@ -19,10 +43,28 @@ export default function Signup() {
     const formSubmit = async (e) => {
         try {
             e.preventDefault();
+            if (loading) return;
+            if (file === "") return;
+
             const { name, email, password } = formDetails;
-            await axios.post("http://localhost:5000/api/user/register", {
-                name, email, password
-            })
+            if (!email || !password || !name) {
+                return toast.error("Input field should not be empty");
+            } else if (password.length < 5) {
+                return toast.error("Password must be at least 5 characters long");
+            }
+
+            await toast.promise(
+                axios.post("http://localhost:5000/api/user/register", {
+                    name, email, password, profileImage: file
+                }),
+                {
+                    pending: "Logging in...",
+                    success: "Login successfully",
+                    error: "Unable to login user",
+                    loading: "Logging user...",
+                }
+            );
+            return navigate("/login");
         } catch (error) {
             console.log('Error', error);
         }
@@ -46,6 +88,16 @@ export default function Signup() {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={formSubmit}>
                         <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Profile Pic
+                            </label>
+                            <input
+                                type="file"
+                                onChange={(e) => onUpload(e.target.files[0])}
+                                name="profile-pic"
+                                id="profile-pic"
+
+                            />
                             <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Full Name
                             </label>
@@ -108,6 +160,15 @@ export default function Signup() {
                             </button>
                         </div>
                     </form>
+                    <p>
+                        Already a user?{" "}
+                        <NavLink
+                            className="login-link"
+                            to={"/login"}
+                        >
+                            Login
+                        </NavLink>
+                    </p>
                 </div>
             </div>
         </>

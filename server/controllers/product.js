@@ -12,7 +12,7 @@ const getAllProducts = async (req, res) => {
 
 const getOneProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.body.id);
+        const product = await Product.findById(req.params.id);
         if (!product) {
             return res.status(400).send("No such Product");
         }

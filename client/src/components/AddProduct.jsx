@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useAddProductMutation } from "../features/products/productApiSlice";
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 function AddProduct() {
+    const [addProduct] = useAddProductMutation();
+    const navigate = useNavigate();
     const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
     const [formDetails, setFormDetails] = useState({
@@ -44,11 +48,19 @@ function AddProduct() {
             if (file === "") return;
 
             const { name, price } = formDetails;
-            const response = await axios.post("http://localhost:5000/api/product", {
-                name,
-                price,
-                productImage: file,
-            })
+            const response = await toast.promise(
+                addProduct({
+                    name,
+                    price,
+                    productImage: file,
+                }).unwrap(),
+                {
+                    loading: "loading...",
+                    success: "successful",
+                    error: "failed",
+                }
+            );
+            navigate('/');
             console.log(response);
         } catch (error) { }
     };

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../redux/reducers/rootSlice";
+import { setUserInfo } from "../../redux/reducers/rootSlice";
 import { jwtDecode } from "jwt-decode";
-import axios from 'axios';
+import { useSignInMutation } from '../../features/auth/authApiSlice';
 
 export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [signIn, { isLoading }] = useSignInMutation();
 
     const [formDetails, setFormDetails] = useState({
         email: '',
@@ -32,20 +33,18 @@ export default function Login() {
                 return toast.error("Password must be at least 5 characters long");
             }
 
-            const { data } = await toast.promise(
-                axios.post("http://localhost:5000/api/user/login", {
-                    email,
-                    password,
-                }),
+            const userData = await toast.promise(
+                signIn({ email, password }).unwrap(),
                 {
-                    pending: "Logging in...",
-                    success: "Login successfully",
-                    error: "Unable to login user",
-                    loading: "Logging user...",
+                    pending: "Please wait...",
+                    success: "Sign in successful",
+                    error: "Sign in failed",
                 }
             );
-            localStorage.setItem("token", data.token);
-            dispatch(setUserInfo(jwtDecode(data.token).userId));
+
+            localStorage.setItem("token", userData.token);
+            dispatch(setUserInfo(jwtDecode(userData.token)));
+            console.log(jwtDecode(userData.token));
             return navigate("/");
         }
         catch (error) {
@@ -64,7 +63,7 @@ export default function Login() {
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Sign up to your account
+                        Login to your account
                     </h2>
                 </div>
 

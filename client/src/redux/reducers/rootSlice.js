@@ -14,3 +14,4 @@ export const rootReducer = createSlice({
 
 export const { setUserInfo } = rootReducer.actions;
 export default rootReducer.reducer;
+export const selectCurrentUser = (state) => state.root.userInfo;

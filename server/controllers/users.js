@@ -49,7 +49,7 @@ const login = async (req, res) => {
             return res.status(400).send("Incorrect credentials");
         }
         const token = jwt.sign(
-            { userId: emailPresent._id },
+            { userInfo: { userId: emailPresent._id, name: emailPresent.name, email: emailPresent.email, profileImage: emailPresent.profileImage } },
             process.env.JWT_TOKEN,
             {
                 expiresIn: "2 days",
