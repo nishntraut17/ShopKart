@@ -5,6 +5,7 @@ import CartItem from './CartItem';
 import { addToCart, removeFromCart, removeSingleItem, emptyCart } from '../../features/cart/cartSlice';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const CheckoutPage = () => {
     const dispatch = useDispatch();
@@ -34,10 +35,13 @@ const CheckoutPage = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
+    const cartItemIdQuantity = cartItems.map(({ _id, quantity }) => ({ _id, quantity }));
+
     //payment integration
     const makePayment = async () => {
         try {
             console.log("ok");
+            console.log(localStorage.getItem("token"));
             const body = {
                 products: cartItems
             }
@@ -52,8 +56,26 @@ const CheckoutPage = () => {
             }
             )
             const session = await response.json();
+
+            await toast.promise(
+                axios.post("http://localhost:5000/api/order", {
+                    cartItemIdQuantity
+                },
+                    {
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                ),
+                {
+                    success: "Login successfully",
+                    error: "Unable to login user",
+                    loading: "Logging user...",
+                }
+            );
             console.log(session);
             window.location = session.url;
+
         } catch (error) {
             console.log(error);
         }

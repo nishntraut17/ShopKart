@@ -9,9 +9,38 @@ const productSchema = mongoose.Schema({
     category: {
         type: String,
     },
+    description: {
+        type: String,
+    },
+    brand: {
+        type: String,
+    },
     productImage: {
         type: String
-    }
+    },
+    ratings: [
+        {
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            rating: { type: Number },
+        },
+    ],
+    comments: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+            comment: {
+                type: String,
+            },
+            date: {
+                type: Date,
+                default: Date.now(),
+            },
+        },
+    ],
+}, {
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Product', productSchema);
