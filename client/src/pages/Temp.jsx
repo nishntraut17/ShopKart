@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
@@ -28,8 +28,17 @@ const products = [
 ]
 
 export default function Example() {
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(true);
 
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    useEffect(() => {
+    }, [setOpen]);
+
+    if (!open) {
+        return <button onChick={handleOpen}>Chick me</button>
+    }
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={setOpen}>

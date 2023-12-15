@@ -17,7 +17,7 @@
 // }
 
 // export default function Navbar() {
-//     const { profileImage } = useSelector(selectCurrentUser).userInfo;
+//     const { profileImage } = useSelector(selectCurrentUser);
 //     return (
 //         <Disclosure as="nav" className="bg-gray-800">
 //             {({ open }) => (
