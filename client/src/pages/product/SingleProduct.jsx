@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from 'axios';
 import { addToCart, removeFromCart, selectCartItems } from '../../features/cart/cartSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,12 +39,6 @@ const SingleProduct = () => {
         fetchData();
     }, []);
 
-    // useEffect(() => {
-    //     // You can perform side effects here after the cart is updated
-    //     console.log('Cart updated:', cartItems);
-    // }, [cartItems]);
-
-
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -53,13 +48,15 @@ const SingleProduct = () => {
             <p>{product.price}</p>
             <p>{product.name}</p>
             {isInCart ? (
-                <button onClick={handleRemoveFromCart}>Remove from Cart</button>
+                <>
+                    <button onClick={handleRemoveFromCart}>Remove from Cart</button>
+                    <Link to="/checkout">
+                        <p>checkout</p>
+                    </Link>
+                </>
             ) : (
                 <button onClick={handleAddToCart}>Add to Cart</button>
             )}
-            <Link to="/checkout">
-                <p>checkout</p>
-            </Link>
         </div>
     )
 }
