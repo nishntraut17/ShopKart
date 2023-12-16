@@ -1,0 +1,161 @@
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
+import {
+    Avatar as MuiAvatar,
+    Divider,
+    IconButton,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+    Tooltip,
+    Box,
+} from "@mui/material";
+import {
+    EditIcon,
+    Fastfood,
+    Favorite,
+    Logout,
+    SettingsIcon,
+    RestaurantMenu,
+} from "@mui/icons-material";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { selectCurrentUser, setUserInfo } from "../../features/auth/authSlice";
+import { useSelector } from "react-redux";
+
+const Avatar = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const decoded = useSelector(selectCurrentUser);
+
+    const open = Boolean(anchorEl);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        setAnchorEl(null);
+        dispatch(setUserInfo({}));
+        localStorage.setItem("token", "");
+        navigate("/login");
+    };
+
+    return (
+        <div className="ml-auto md:ml-0">
+            <Tooltip title="Account settings">
+                <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    aria-controls={open ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                >
+                    <MuiAvatar
+                        alt={decoded?.name}
+                        src={decoded?.profileImage}
+                        sx={{ width: 34, height: 34 }}
+                    />
+                </IconButton>
+            </Tooltip>
+            <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        overflow: "visible",
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        mt: 1.5,
+                        "& .MuiMuiAvatar-root": {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
+                        },
+                        "&:before": {
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: "background.paper",
+                            transform: "translateY(-50%) rotate(45deg)",
+                            zIndex: 0,
+                        },
+                    },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+                <MenuItem>
+                    <Link
+                        to={"/profile"}
+                        className="flex items-center"
+                    >
+                        <MuiAvatar
+                            alt={decoded?.name}
+                            src={decoded?.profileImage}
+                            sx={{ width: 32, height: 32, mr: 2 }}
+                        />{" "}
+                        Profile
+                    </Link>
+                </MenuItem>
+                {
+                    <Box>
+                        <Divider />
+                        <MenuItem>
+                            <Link
+                                to="/product/add"
+                                className="flex items-center"
+                            >
+                                <ListItemIcon>
+                                    <RestaurantMenu fontSize="small" />
+                                </ListItemIcon>
+                                Add new Product
+                            </Link>
+                        </MenuItem>
+                        <MenuItem>
+                            <Link
+                                to="/product/my-product"
+                                className="flex items-center"
+                            >
+                                <ListItemIcon>
+                                    <Fastfood fontSize="small" />
+                                </ListItemIcon>
+                                My Product
+                            </Link>
+                        </MenuItem>
+                    </Box>}
+                <MenuItem>
+                    <Link
+                        to="/product/saved"
+                        className="flex items-center"
+                    >
+                        <ListItemIcon>
+                            <Favorite fontSize="small" />
+                        </ListItemIcon>
+                        Saved Products
+                    </Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                    <ListItemIcon>
+                        <Logout fontSize="small" />
+                    </ListItemIcon>
+                    Logout
+                </MenuItem>
+            </Menu>
+        </div>
+    );
+};
+
+export default Avatar;

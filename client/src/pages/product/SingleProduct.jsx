@@ -44,9 +44,21 @@ const SingleProduct = () => {
 
     return (
         <div className="container mx-auto p-8">
-            <img src={product.productImage} alt={product.name} className="mb-4 rounded-lg" />
-            <p className="text-2xl font-bold mb-4">{product.name}</p>
-            <p className="text-lg font-semibold mb-4">${product.price}</p>
+            <div className='flex flex-row'>
+                <div>
+                    <img src={product.productImage} alt={product.name} className="mb-4 rounded-lg" />
+                </div>
+                <div className='flex flex-col'>
+                    <p className="text-2xl font-bold mb-4">{product.name}</p>
+                    <h1>Brand: {product.brand}</h1>
+                    <h1>Category: {product.category}</h1>
+                    <p className="text-lg font-semibold mb-4">INR: {product.price}</p>
+                    <div className='flex flex-col'>
+                        <h1>Description:</h1>
+                        <h1> {product.description}</h1>
+                    </div>
+                </div>
+            </div>
             {/* <p className="text-gray-700 mb-4">{product.description}</p> */}
 
             <button

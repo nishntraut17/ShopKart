@@ -24,8 +24,10 @@ const getOneProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const newProduct = new Product({ ...req.body });
+        console.log(req.body);
+        const newProduct = new Product({ name: req.body.name, price: req.body.price, description: req.body.description, brand: req.body.brand, category: req.body.category, productImage: req.body.productImage });
         await newProduct.save();
+        res.status(201).send(newProduct);
     } catch (error) {
         console.log(error);
     }

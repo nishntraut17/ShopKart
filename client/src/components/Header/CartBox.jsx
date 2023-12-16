@@ -1,10 +1,12 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart, removeSingleItem, emptyCart } from '../features/cart/cartSlice';
-import toast from 'react-hot-toast';
-import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import { setOpen, selectCartItems, selectCartOpen, addToCart, removeFromCart, removeSingleItem, emptyCart } from '../../features/cart/cartSlice';
+import toast from 'react-hot-toast'
+import { Link } from 'react-router-dom';
+import CartBoxItem from './CartBoxItem';
+
 
 const products = [
     {
@@ -31,14 +33,39 @@ const products = [
     // More products...
 ]
 
-export default function Example() {
+export default function CartBox() {
     const dispatch = useDispatch();
+    const open = useSelector(selectCartOpen);
+
     const cartItems = useSelector((state) => state.cart.items);
-    const [open, setOpen] = useState(true);
+
+    const handleRemoveFromCart = (productId) => {
+        dispatch(removeFromCart(productId));
+        toast.success("Item Removed From cart");
+    };
+
+    const handleAddSingleQuantity = (product) => {
+        dispatch(addToCart(product));
+        toast.success("Item quantity Increased");
+    }
+
+    const handleRemoveSingleItem = (product) => {
+        dispatch(removeSingleItem(product));
+        toast.success("Item quantity reduced");
+    }
+
+    const handleEmptyCart = () => {
+        dispatch(emptyCart());
+        toast.success("Your cart is empty");
+    }
+
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    };
 
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={setOpen}>
+            <Dialog as="div" className="relative z-30" onClose={setOpen}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"
@@ -72,7 +99,7 @@ export default function Example() {
                                                     <button
                                                         type="button"
                                                         className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                                                        onClick={() => setOpen(false)}
+                                                        onClick={() => dispatch(setOpen(false))}
                                                     >
                                                         <span className="absolute -inset-0.5" />
                                                         <span className="sr-only">Close panel</span>
@@ -84,40 +111,8 @@ export default function Example() {
                                             <div className="mt-8">
                                                 <div className="flow-root">
                                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                                        {products.map((product) => (
-                                                            <li key={product.id} className="flex py-6">
-                                                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                                    <img
-                                                                        src={product.imageSrc}
-                                                                        alt={product.imageAlt}
-                                                                        className="h-full w-full object-cover object-center"
-                                                                    />
-                                                                </div>
-
-                                                                <div className="ml-4 flex flex-1 flex-col">
-                                                                    <div>
-                                                                        <div className="flex justify-between text-base font-medium text-gray-900">
-                                                                            <h3>
-                                                                                <a href={product.href}>{product.name}</a>
-                                                                            </h3>
-                                                                            <p className="ml-4">{product.price}</p>
-                                                                        </div>
-                                                                        <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                                                                    </div>
-                                                                    <div className="flex flex-1 items-end justify-between text-sm">
-                                                                        <p className="text-gray-500">Qty {product.quantity}</p>
-
-                                                                        <div className="flex">
-                                                                            <button
-                                                                                type="button"
-                                                                                className="font-medium text-indigo-600 hover:text-indigo-500"
-                                                                            >
-                                                                                Remove
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
+                                                        {cartItems.map((product) => (
+                                                            <CartBoxItem item={product} id={product._id} name={product.name} brand={product.brand} quantity={product.quantity} price={product.price} image={product.productImage} onRemove={handleRemoveFromCart} onRemoveOneQuantity={handleRemoveSingleItem} onAddOneQuantity={handleAddSingleQuantity} />
                                                         ))}
                                                     </ul>
                                                 </div>
@@ -127,16 +122,25 @@ export default function Example() {
                                         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                                             <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <p>Subtotal</p>
-                                                <p>$262.00</p>
+                                                <p>{calculateTotal()}</p>
                                             </div>
                                             <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                                             <div className="mt-6">
-                                                <a
-                                                    href="#"
+                                                <div
+                                                    className="flex items-center justify-center rounded-md border border-transparent bg-grey-600 px-6 py-3 text-base font-medium shadow-sm hover:bg-grey-700 cursor-pointer"
+                                                    onClick={handleEmptyCart}
+                                                >
+                                                    Empty Cart
+                                                </div>
+                                            </div>
+                                            <div className="mt-6">
+                                                <Link
+                                                    to="/checkout"
                                                     className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                                    onClick={() => dispatch(setOpen(false))}
                                                 >
                                                     Checkout
-                                                </a>
+                                                </Link>
                                             </div>
                                             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                                 <p>
@@ -144,7 +148,7 @@ export default function Example() {
                                                     <button
                                                         type="button"
                                                         className="font-medium text-indigo-600 hover:text-indigo-500"
-                                                        onClick={() => setOpen(false)}
+                                                        onClick={() => dispatch(setOpen(false))}
                                                     >
                                                         Continue Shopping
                                                         <span aria-hidden="true"> &rarr;</span>

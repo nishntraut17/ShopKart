@@ -12,7 +12,7 @@ const getAllOrders = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ user: req.user });
+        const orders = await Order.find({ user: req.user }).populate("product", ["name", "price", "productImage"]);
         return res.send(orders);
     } catch (error) {
         res.status(500).send(error);
@@ -21,8 +21,8 @@ const getUserOrders = async (req, res) => {
 
 const addOrder = async (req, res) => {
     try {
-        req.body.cartItemIdQuantity.map(async (item) => {
-            const result = await Order({ product: item._id, quantity: item.quantity, user: req.user });
+        req.body.orderItems.map(async (item) => {
+            const result = await Order({ product: item._id, quantity: item.quantity, user: req.user, address: item.address });
             console.log("Result is ", result);
             await result.save();
         })

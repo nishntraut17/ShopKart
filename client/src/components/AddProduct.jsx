@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import { useAddProductMutation } from "../features/products/productApiSlice";
+// import { useAddProductMutation } from "../features/products/productApiSlice";
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function AddProduct() {
-    const [addProduct] = useAddProductMutation();
+    // const [addProduct] = useAddProductMutation();
     const navigate = useNavigate();
     const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
     const [formDetails, setFormDetails] = useState({
         name: "",
         price: "",
+        brand: "",
+        category: "",
+        description: ""
     });
 
     const inputChange = (e) => {
@@ -47,13 +51,17 @@ function AddProduct() {
             if (loading) return;
             if (file === "") return;
 
-            const { name, price } = formDetails;
+            const { name, price, description, brand, category } = formDetails;
+            console.log(formDetails);
             const response = await toast.promise(
-                addProduct({
+                axios.post('http://localhost:5000/api/product', {
                     name,
                     price,
+                    description,
+                    brand,
+                    category,
                     productImage: file,
-                }).unwrap(),
+                }),
                 {
                     loading: "loading...",
                     success: "successful",
@@ -76,7 +84,7 @@ function AddProduct() {
                     <input
                         type="text"
                         name="name"
-                        placeholder="Enter your first name"
+                        placeholder="Enter product name"
                         value={formDetails.name}
                         onChange={inputChange}
                     />
@@ -84,8 +92,32 @@ function AddProduct() {
                         type="text"
                         name="price"
 
-                        placeholder="Enter your last name"
+                        placeholder="Enter price"
                         value={formDetails.price}
+                        onChange={inputChange}
+                    />
+                    <input
+                        type="text"
+                        name="brand"
+
+                        placeholder="Enter brand"
+                        value={formDetails.brand}
+                        onChange={inputChange}
+                    />
+                    <input
+                        type="text"
+                        name="category"
+
+                        placeholder="Enter Category"
+                        value={formDetails.category}
+                        onChange={inputChange}
+                    />
+                    <input
+                        type="text"
+                        name="description"
+
+                        placeholder="Enter description"
+                        value={formDetails.description}
                         onChange={inputChange}
                     />
                     <input
