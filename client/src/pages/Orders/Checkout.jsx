@@ -1,7 +1,6 @@
 // CheckoutPage.js
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import CartItem from './CartItem';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import axios from 'axios';

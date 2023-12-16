@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Card from './Card/Card';
+import Card from '../Card/Card';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);

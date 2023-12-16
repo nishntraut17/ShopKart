@@ -64,7 +64,7 @@ export default function Signup() {
                     loading: "Logging user...",
                 }
             );
-            return navigate("/login");
+            return navigate("/auth/login");
         } catch (error) {
             console.log('Error', error);
         }
@@ -164,7 +164,7 @@ export default function Signup() {
                         Already a user?{" "}
                         <NavLink
                             className="login-link"
-                            to={"/login"}
+                            to={"/auth/login"}
                         >
                             Login
                         </NavLink>

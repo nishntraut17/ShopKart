@@ -5,6 +5,9 @@ import axios from 'axios';
 import { addToCart, removeFromCart, selectCartItems } from '../../features/cart/cartSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
+import { Rating } from '@mui/material';
+import Comment from '../../components/comment/Comment';
+import NoData from "../../components/noData/NoData";
 
 const SingleProduct = () => {
     const { id } = useParams();
@@ -43,35 +46,61 @@ const SingleProduct = () => {
     }
 
     return (
-        <div className="container mx-auto p-8">
+        <div className="container mx-auto py-16 px-32">
             <div className='flex flex-row'>
                 <div>
                     <img src={product.productImage} alt={product.name} className="mb-4 rounded-lg" />
                 </div>
                 <div className='flex flex-col'>
-                    <p className="text-2xl font-bold mb-4">{product.name}</p>
-                    <h1>Brand: {product.brand}</h1>
-                    <h1>Category: {product.category}</h1>
+                    <div className='flex flex-row gap-10'>
+                        <p className="text-2xl font-bold mb-4 py-2">{product.name}</p>
+                        <Rating
+                            value={5}
+                            size={"medium"}
+                            className='p-3'
+                            readOnly
+                        />
+                    </div>
+                    <h1 className="text-xl font-semibold mb-4">Brand: {product.brand}</h1>
+                    <h1 className="text-xl font-semibold mb-4">Category: {product.category}</h1>
                     <p className="text-lg font-semibold mb-4">INR: {product.price}</p>
                     <div className='flex flex-col'>
-                        <h1>Description:</h1>
-                        <h1> {product.description}</h1>
+                        <h1 className="text-xl font-semibold mb-4">Description:</h1>
+                        <h1 className="text-lg font-semibold mb-4"> {product.description}</h1>
+                    </div>
+                    <div className='flex flex-row gap-10'>
+                        <button
+                            onClick={handleAddToCart}
+                            className="bg-grey-700 px-4 py-2 rounded-md hover:bg-grey-1000"
+                        >
+                            Add to Cart
+                        </button>
+                        <Link to="/checkout">
+                            <button className="bg-grey-700 px-4 py-2 rounded-md hover:bg-grey-1000">
+                                Buy Now
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>
             {/* <p className="text-gray-700 mb-4">{product.description}</p> */}
-
-            <button
-                onClick={handleAddToCart}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-            >
-                Add to Cart
-            </button>
-            <Link to="/checkout">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                    Checkout
-                </button>
-            </Link>
+            <div className="w-full sm:w-4/5 mx-auto flex flex-col gap-6">
+                <h3 className="font-bold text-2xl">Comments</h3>
+                {product?.comments?.length ? (
+                    <div className="flex flex-col gap-6">
+                        {product?.comments?.map((comment) => (
+                            <Comment
+                                key={comment?._id}
+                                comment={comment}
+                                userId={product?.userId}
+                            // handleDeleteComment={handleDeleteComment}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <NoData text={"Comments"} />
+                )}
+            </div>
         </div>
     );
 };

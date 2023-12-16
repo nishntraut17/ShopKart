@@ -43,7 +43,7 @@ const Avatar = () => {
         setAnchorEl(null);
         dispatch(setUserInfo({}));
         localStorage.setItem("token", "");
-        navigate("/login");
+        navigate("/auth/login");
     };
 
     return (
@@ -151,7 +151,7 @@ const Avatar = () => {
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
-                    Logout
+                    Logout (change state)
                 </MenuItem>
             </Menu>
         </div>

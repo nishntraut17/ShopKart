@@ -1,6 +1,6 @@
 import React from 'react'
-import AmazonBanner from "../static/amazonbanner.jpg";
-import Flipkart3 from "../static/flipkart3.png";
+import AmazonBanner from "../../static/amazonbanner.jpg";
+import Flipkart3 from "../../static/flipkart3.png";
 
 const Banner = () => {
     return (
