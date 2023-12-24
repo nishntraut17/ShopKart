@@ -49,7 +49,7 @@ const login = async (req, res) => {
             return res.status(400).send("Incorrect credentials");
         }
         const token = jwt.sign(
-            { userId: emailPresent._id, name: emailPresent.name, email: emailPresent.email, profileImage: emailPresent.profileImage },
+            { userId: emailPresent._id, name: emailPresent.name, email: emailPresent.email, profileImage: emailPresent.profileImage, role: emailPresent.role },
             process.env.JWT_TOKEN,
             {
                 expiresIn: "2 days",
@@ -61,4 +61,40 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { register, login, getAllUsers };
+const updateUser = async (req, res) => {
+    try {
+        console.log(req.user);
+        console.log(req.body);
+        const user = await User.find({ _id: req.user });
+        if (!user) {
+            res.send("No such user exist");
+        }
+        const updatedUser = await User.findAndUpdate({ _id: user }, { email: req.body.email, name: req.body.name, password: req.body.password, profileImage: req.body.profileImage })
+        if (!updateUser) {
+            res.send("Problem while updating user");
+        }
+        res.status(201).send("User Updated");
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+const reqToBecomeSeller = async (req, res) => {
+    try {
+        console.log(req.user);
+        const user = await User.find({ _id: req.user });
+        console.log(user);
+        if (!user) {
+            res.send("No such user exist");
+        }
+        // const updatedUser = await User.findAndUpdate({ _id: user }, { })
+        user.role = 'pseudoSeller';
+        await user.save();
+        // const result = await User.findAndUpdate({})
+        res.status(201).send("Req send successfully");
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+module.exports = { register, login, getAllUsers, updateUser, reqToBecomeSeller };

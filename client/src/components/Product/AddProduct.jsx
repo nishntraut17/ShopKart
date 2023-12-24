@@ -79,8 +79,9 @@ function AddProduct() {
                 <h2 className="">Upload</h2>
                 <form
                     onSubmit={formSubmit}
-
+                    className="flex flex-col p-16 lg:w-80 gap-4"
                 >
+                    <label>Enter Product Name:</label>
                     <input
                         type="text"
                         name="name"
@@ -88,6 +89,7 @@ function AddProduct() {
                         value={formDetails.name}
                         onChange={inputChange}
                     />
+                    <label>Enter Price:</label>
                     <input
                         type="text"
                         name="price"
@@ -96,6 +98,7 @@ function AddProduct() {
                         value={formDetails.price}
                         onChange={inputChange}
                     />
+                    <label>Enter Brand:</label>
                     <input
                         type="text"
                         name="brand"
@@ -104,6 +107,7 @@ function AddProduct() {
                         value={formDetails.brand}
                         onChange={inputChange}
                     />
+                    <label>Enter Category:</label>
                     <input
                         type="text"
                         name="category"
@@ -112,6 +116,7 @@ function AddProduct() {
                         value={formDetails.category}
                         onChange={inputChange}
                     />
+                    <label>Enter Description:</label>
                     <input
                         type="text"
                         name="description"
@@ -120,6 +125,7 @@ function AddProduct() {
                         value={formDetails.description}
                         onChange={inputChange}
                     />
+                    <label>Upload image:</label>
                     <input
                         type="file"
                         onChange={(e) => onUpload(e.target.files[0])}
@@ -129,7 +135,7 @@ function AddProduct() {
                     />
                     <button
                         type="submit"
-                        className=""
+                        className="bg-slate-200 border-2 rounded-lg p-2"
                     >
                         Upload
                     </button>

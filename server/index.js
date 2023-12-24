@@ -38,7 +38,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        success_url: "http://localhost:3000",
+        success_url: "http://localhost:3000/orders/success",
         cancel_url: "http://localhost:3000",
     })
     console.log(session);

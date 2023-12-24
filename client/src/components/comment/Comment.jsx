@@ -1,11 +1,8 @@
 import React from "react";
-import { BsCalendarCheck } from "react-icons/bs";
 import { IconButton, Menu, MenuItem, Avatar as MuiAvatar } from "@mui/material";
-// import dateFormat from "../../common/dateFormat";
 import { MoreVert } from "@mui/icons-material";
 
 const Comment = ({ comment, userId, handleDeleteComment }) => {
-  // const formattedDate = dateFormat(comment?.date);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -23,21 +20,17 @@ const Comment = ({ comment, userId, handleDeleteComment }) => {
   };
 
   return (
-    <div className="border-2 border-gray-200 rounded-xl flex flex-col sm:flex-row gap-4 p-6 items-center">
+    <div className="border-2 border-gray-200 rounded-xl flex gap-4 p-2 lg:ml-24 items-center">
       {/* Commented user details */}
       <MuiAvatar
         alt={comment?.user?.name}
         src={comment?.user?.profilePicture}
-        sx={{ width: 60, height: 60 }}
-        className="border-2 border-primary shadow-lg"
+        sx={{ width: 30, height: 30 }}
+        className="border-2"
       />
       <div className="flex flex-col gap-1 w-full">
         <div className="flex justify-between flex-col sm:flex-row items-center">
           <h4 className="font-bold text-lg">{comment?.user?.name}</h4>
-          <span className="flex gap-2 items-center text-sm">
-            <BsCalendarCheck />
-            {/* {formattedDate} */}
-          </span>
         </div>
         {/* Comment content */}
         <div className="flex justify-between">

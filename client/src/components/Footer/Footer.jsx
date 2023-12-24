@@ -6,6 +6,7 @@ import {
 } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import LogoWithNameTransparent from "../../static/LogoWithNameTransparent.png";
 
 const Footer = () => {
     return (
@@ -14,11 +15,9 @@ const Footer = () => {
             <div className="box flex flex-col md:flex-row  justify-between border-b-2 border-yellow-100 pb-10 gap-8">
                 {/* Footer top left */}
                 <div className="basis-1/2 flex flex-col gap-6 items-center md:items-start text-center md:text-start">
-                    <p>Logo</p>
+                    <img src={LogoWithNameTransparent} alt="logo" className="h-12 w-auto" />
                     <p>
-                        Your culinary haven for sharing and savoring. Explore recipes,
-                        restaurants, and engaging discussions. Join us now and indulge in
-                        flavor-filled experiences!"
+                        Empower Your Lifestyle with Cutting-Edge Technology! Explore a world of possibilities with our curated collection of Mobiles, Televisions, Laptops, Desktops, Tablets, Headphones, and Smart Watches. Elevate your everyday with innovation at your fingertips. Shop now and redefine your digital experience with Shopkart.
                     </p>
                 </div>
                 {/* Footer top right */}
@@ -27,16 +26,16 @@ const Footer = () => {
                     <ul className="flex flex-col gap-2 font-semibold mx-8 items-center md:items-start">
                         <li className="text-gray-700 text-sm text-bold mb-2">Product</li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Home</Link>
+                            <Link>Mobile</Link>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link to='/blog'>Blog</Link>
+                            <Link to='/blog'>Televisions</Link>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link to='recipe'>Recipes</Link>
+                            <Link to='recipe'>Headphones</Link>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link>Contact</Link>
+                            <Link>Laptops</Link>
                         </motion.li>
                     </ul>
                     <ul className="flex flex-col gap-2 font-semibold mx-8 items-center md:items-start">
@@ -74,7 +73,7 @@ const Footer = () => {
             {/* Footer bottom */}
             <div className="box flex justify-center sm:justify-between flex-col sm:flex-row w-full gap-4">
                 <p className="text-sm text-center">
-                    &copy; {new Date().getFullYear()} Electron. All rights reserved
+                    &copy; {new Date().getFullYear()} Shopkart. All rights reserved
                 </p>
                 {/* Footer social links */}
                 <ul className="flex justify-center gap-6 text-xl">
@@ -83,7 +82,7 @@ const Footer = () => {
                         whileHover={{ y: -4 }}
                     >
                         <a
-                            href="https://github.com/nishntraut17"
+                            href="https://github.com/nishntraut17/Shopkart"
                             aria-label="Follow me on github"
                         >
                             <AiFillGithub />

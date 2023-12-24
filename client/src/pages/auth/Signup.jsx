@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import OnlyLogoTransparent from '../../static/OnlyLogoTransparent.png';
+import ComponentLoading from '../../components/loading/ComponentLoading';
 
 export default function Signup() {
     const navigate = useNavigate();
-    const [file, setFile] = useState("");
+    // const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [formDetails, setFormDetails] = useState({
@@ -14,24 +16,24 @@ export default function Signup() {
         password: "",
     });
 
-    const onUpload = async (element) => {
-        setLoading(true);
-        if (element.type === "image/jpeg" || element.type === "image/png") {
-            const data = new FormData();
-            data.append("file", element);
-            data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-            data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
-            fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
-                method: "POST",
-                body: data,
-            })
-                .then((res) => res.json())
-                .then((data) => setFile(data.url.toString()));
-            setLoading(false);
-        } else {
-            setLoading(false);
-        }
-    };
+    // const onUpload = async (element) => {
+    //     setLoading(true);
+    //     if (element.type === "image/jpeg" || element.type === "image/png") {
+    //         const data = new FormData();
+    //         data.append("file", element);
+    //         data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
+    //         data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+    //         fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
+    //             method: "POST",
+    //             body: data,
+    //         })
+    //             .then((res) => res.json())
+    //             .then((data) => setFile(data.url.toString()));
+    //         setLoading(false);
+    //     } else {
+    //         setLoading(false);
+    //     }
+    // };
 
     const inputChange = (e) => {
         const { name, value } = e.target;
@@ -44,7 +46,7 @@ export default function Signup() {
         try {
             e.preventDefault();
             if (loading) return;
-            if (file === "") return;
+            // if (file === "") return;
 
             const { name, email, password } = formDetails;
             if (!email || !password || !name) {
@@ -55,13 +57,12 @@ export default function Signup() {
 
             await toast.promise(
                 axios.post("http://localhost:5000/api/user/register", {
-                    name, email, password, profileImage: file
+                    name, email, password
                 }),
                 {
-                    pending: "Logging in...",
-                    success: "Login successfully",
-                    error: "Unable to login user",
-                    loading: "Logging user...",
+                    success: "SignUp successfully",
+                    error: "Unable to Register",
+                    loading: "Signing up user...",
                 }
             );
             return navigate("/auth/login");
@@ -69,7 +70,9 @@ export default function Signup() {
             console.log('Error', error);
         }
     }
-
+    if (loading) {
+        <ComponentLoading />
+    }
     return (
         <>
 
@@ -77,7 +80,7 @@ export default function Signup() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                        src={OnlyLogoTransparent}
                         alt="Your Company"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -88,7 +91,7 @@ export default function Signup() {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={formSubmit}>
                         <div>
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                            {/* <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Profile Pic
                             </label>
                             <input
@@ -97,7 +100,7 @@ export default function Signup() {
                                 name="profile-pic"
                                 id="profile-pic"
 
-                            />
+                            /> */}
                             <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Full Name
                             </label>

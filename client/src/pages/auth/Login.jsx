@@ -5,11 +5,14 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { useSignInMutation } from '../../features/auth/authApiSlice';
+import OnlyLogoTransparent from '../../static/OnlyLogoTransparent.png';
+import ComponentLoading from '../../components/loading/ComponentLoading';
 
 export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [signIn, { isLoading }] = useSignInMutation();
+    const [signIn] = useSignInMutation();
+    const [loading, setLoading] = useState(false);
 
     const [formDetails, setFormDetails] = useState({
         email: '',
@@ -25,6 +28,7 @@ export default function Login() {
 
     const formSubmit = async (e) => {
         try {
+            setLoading(true);
             e.preventDefault();
             const { email, password } = formDetails;
             if (!email || !password) {
@@ -45,11 +49,17 @@ export default function Login() {
             localStorage.setItem("token", userData.token);
             dispatch(setUserInfo(jwtDecode(userData.token)));
             console.log(jwtDecode(userData.token));
+            setLoading(false);
             return navigate("/");
         }
         catch (error) {
+            setLoading(false);
             return error;
         }
+    }
+
+    if (loading) {
+        <ComponentLoading />
     }
 
     return (
@@ -59,8 +69,8 @@ export default function Login() {
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-10 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
+                        src={OnlyLogoTransparent}
+                        alt="logo"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Login to your account
@@ -120,7 +130,7 @@ export default function Login() {
                         Not a user?{" "}
                         <NavLink
                             className="login-link"
-                            to={"/register"}
+                            to={"/auth/signup"}
                         >
                             Register
                         </NavLink>

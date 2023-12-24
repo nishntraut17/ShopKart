@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import {
     EditIcon,
-    Fastfood,
     Favorite,
     Logout,
     SettingsIcon,
     RestaurantMenu,
 } from "@mui/icons-material";
+import { IoAdd } from "react-icons/io5";
+import { FaShopify } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { selectCurrentUser, setUserInfo } from "../../features/auth/authSlice";
@@ -26,6 +27,7 @@ import { useSelector } from "react-redux";
 const Avatar = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const decoded = useSelector(selectCurrentUser);
+    const user = useSelector(selectCurrentUser);
 
     const open = Boolean(anchorEl);
     const dispatch = useDispatch();
@@ -42,7 +44,7 @@ const Avatar = () => {
     const handleLogout = () => {
         setAnchorEl(null);
         dispatch(setUserInfo({}));
-        localStorage.setItem("token", "");
+        localStorage.removeItem("token");
         navigate("/auth/login");
     };
 
@@ -110,48 +112,40 @@ const Avatar = () => {
                         Profile
                     </Link>
                 </MenuItem>
-                {
+                {console.log(user)}
+                {(user.role === 'seller' || user.role === 'admin') && (
                     <Box>
                         <Divider />
                         <MenuItem>
                             <Link
-                                to="/product/add"
+                                to="/product/addproduct"
                                 className="flex items-center"
                             >
                                 <ListItemIcon>
-                                    <RestaurantMenu fontSize="small" />
+                                    <IoAdd />
                                 </ListItemIcon>
                                 Add new Product
                             </Link>
                         </MenuItem>
                         <MenuItem>
                             <Link
-                                to="/product/my-product"
+                                to="/product/items-sold"
                                 className="flex items-center"
                             >
                                 <ListItemIcon>
-                                    <Fastfood fontSize="small" />
+                                    <FaShopify />
                                 </ListItemIcon>
-                                My Product
+                                Items Sold
                             </Link>
                         </MenuItem>
-                    </Box>}
-                <MenuItem>
-                    <Link
-                        to="/product/saved"
-                        className="flex items-center"
-                    >
-                        <ListItemIcon>
-                            <Favorite fontSize="small" />
-                        </ListItemIcon>
-                        Saved Products
-                    </Link>
-                </MenuItem>
+                    </Box>
+                )}
+
                 <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
-                    Logout (change state)
+                    Logout
                 </MenuItem>
             </Menu>
         </div>

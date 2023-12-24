@@ -9,9 +9,18 @@ const authReducer = createSlice({
         setUserInfo: (state, action) => {
             state.userInfo = action.payload;
         },
+        updateRole: (state, action) => {
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    role: action.payload
+                }
+            }
+        }
     },
 });
 
-export const { setUserInfo } = authReducer.actions;
+export const { setUserInfo, updateRole } = authReducer.actions;
 export default authReducer.reducer;
 export const selectCurrentUser = (state) => state.auth.userInfo;

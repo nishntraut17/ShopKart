@@ -18,7 +18,7 @@ const CartBoxItem = ({ item, id, image, name, price, brand, quantity, onRemove, 
                         <h3>
                             <Link to={id}>{name}</Link>
                         </h3>
-                        <p className="ml-4">{price}</p>
+                        <p className="ml-4"> ₹ {price}</p>
                     </div>
                     <p className="mt-1 text-sm text-gray-500">{brand}</p>
                 </div>

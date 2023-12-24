@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ name, image, brand }) => {
+const Card = ({ name, image, price }) => {
     return (
 
         <div className="group relative">
@@ -15,7 +15,7 @@ const Card = ({ name, image, brand }) => {
                 <span className="absolute inset-0" />
                 {name}
             </h3>
-            <p className="text-base font-semibold text-gray-900">{brand}</p>
+            <p className="text-base font-semibold text-gray-900">₹ {price}</p>
         </div>
     )
 }

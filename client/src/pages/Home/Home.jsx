@@ -1,17 +1,23 @@
 import React from 'react';
-import Footer from '../../components/Footer/Footer';
-import Category from '../../components/Home/Category';
-import Brand from '../../components/Home/Brands';
+import SmallCard from '../../components/Card/SmallCard';
 import Banner from '../../components/Home/Banner';
 
 const Home = () => {
     return (
         <>
             <Banner />
-            <Category />
-            <Brand />
-            <Category />
-            <Footer />
+            <div className='px-20'>
+                <SmallCard category={"Mobile"} />
+            </div>
+            <div className='px-20'>
+                <SmallCard category={"Tablet"} />
+            </div>
+            <div className='px-20'>
+                <SmallCard category={"Television"} />
+            </div>
+            <div className='px-20'>
+                <SmallCard category={"Smart watch"} />
+            </div>
         </>
     )
 }
