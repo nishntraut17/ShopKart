@@ -39,7 +39,7 @@ export default function SmallCard({ category }) {
                             <div key={i} className="bg-white rounded-lg border-2 flex flex-col items-center justify-center gap-1 p-1 hover:scale-105">
                                 <div className="overflow-hidden border rounded-lg hover:opacity-75 w-48 h-48">
                                     <img
-                                        src={item.productImage}
+                                        src={item.productImages[0]}
                                         alt="item"
                                         className="w-full h-full object-cover"
                                     />

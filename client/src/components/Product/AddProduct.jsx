@@ -6,8 +6,9 @@ import axios from 'axios';
 
 function AddProduct() {
     // const [addProduct] = useAddProductMutation();
+    const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
-    const [file, setFile] = useState("");
+    const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [formDetails, setFormDetails] = useState({
         name: "",
@@ -17,6 +18,22 @@ function AddProduct() {
         description: ""
     });
 
+    const handleImageChange = (elements) => {
+        const newPreviews = Array.from(elements).map(element => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(element);
+            });
+        });
+
+        Promise.all(newPreviews).then((previews) => {
+            setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
+        });
+    };
+
     const inputChange = (e) => {
         const { name, value } = e.target;
         return setFormDetails({
@@ -25,23 +42,31 @@ function AddProduct() {
         });
     };
 
-    const onUpload = async (element) => {
+    const onUpload = async (elements) => {
         setLoading(true);
-        if (element.type === "image/jpeg" || element.type === "image/png") {
-            const data = new FormData();
-            data.append("file", element);
-            data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-            data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
-            fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
-                method: "POST",
-                body: data,
-            })
-                .then((res) => res.json())
-                .then((data) => setFile(data.url.toString()));
-            setLoading(false);
-        } else {
-            setLoading(false);
-        }
+        handleImageChange(elements);
+
+        const uploadPromises = Array.from(elements).map((element) => {
+            if (element.type === "image/jpeg" || element.type === "image/png") {
+                const data = new FormData();
+                data.append("file", element);
+                data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
+                data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+                return fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
+                    method: "POST",
+                    body: data,
+                })
+                    .then((res) => res.json())
+                    .then((data) => data.url.toString());
+            } else {
+                return Promise.resolve(null);
+            }
+        });
+
+        const uploadedFiles = await Promise.all(uploadPromises);
+
+        setFiles((prevFiles) => [...prevFiles, ...uploadedFiles.filter(file => file !== null)]);
+        setLoading(false);
     };
 
     const formSubmit = async (e) => {
@@ -49,7 +74,7 @@ function AddProduct() {
             e.preventDefault();
 
             if (loading) return;
-            if (file === "") return;
+            if (files.length === 0) return;
 
             const { name, price, description, brand, category } = formDetails;
             console.log(formDetails);
@@ -60,7 +85,7 @@ function AddProduct() {
                     description,
                     brand,
                     category,
-                    productImage: file,
+                    productImages: files,
                 }),
                 {
                     loading: "loading...",
@@ -125,14 +150,23 @@ function AddProduct() {
                         value={formDetails.description}
                         onChange={inputChange}
                     />
-                    <label>Upload image:</label>
+                    <label>Upload images:</label>
                     <input
                         type="file"
-                        onChange={(e) => onUpload(e.target.files[0])}
+                        onChange={(e) => onUpload(e.target.files)}
                         name="profile-pic"
                         id="profile-pic"
 
                     />
+                    {imagePreviews.map((preview, index) => (
+                        <div key={index}>
+                            <img
+                                src={preview}
+                                alt={`Preview ${index}`}
+                                style={{ maxWidth: '100%', maxHeight: '200px' }}
+                            />
+                        </div>
+                    ))}
                     <button
                         type="submit"
                         className="bg-slate-200 border-2 rounded-lg p-2"

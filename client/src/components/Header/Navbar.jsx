@@ -5,7 +5,8 @@ import { FiLogIn, FiMenu } from "react-icons/fi";
 import CartBox from "./CartBox";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from "../../features/auth/authSlice";
-import { setOpen } from "../../features/cart/cartSlice";
+import { setOpen, itemCount } from "../../features/cart/cartSlice";
+import { ShoppingCart } from "@mui/icons-material";
 
 import Menu from "./Menu";
 import LogoWithNameTransparent from "../../static/LogoWithNameTransparent.png";
@@ -15,6 +16,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
     const user = useSelector(selectCurrentUser);
+    const cnt = useSelector(itemCount);
 
     return (
         <header className="shadow-sm sticky top-0 backdrop-blur-sm bg-[#fffefc80] z-20">
@@ -53,11 +55,6 @@ const Header = () => {
                                 </NavLink>
                             </li>
                         )}
-                        {token && (
-                            <li>
-                                <p onClick={() => dispatch(setOpen(true))} className="h-6 w-6 cursor-pointer relative block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600">Cart</p>
-                            </li>
-                        )}
                         {token && user.role === 'consumer' && (
                             <li>
                                 <NavLink
@@ -68,12 +65,28 @@ const Header = () => {
                                 </NavLink>
                             </li>
                         )}
+                        {token && user.role === 'admin' && (
+                            <li>
+                                <NavLink
+                                    to={"/admin/allusers"}
+                                    className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
+                                >
+                                    Admin Dashboard
+                                </NavLink>
+                            </li>
+                        )}
                     </ul>
                 </nav>
                 <CartBox />
                 {/* Sign in button */}
                 {token && token !== "" ? (
-                    <Avatar />
+                    <div className="relative">
+                        <p className="absolute left-5 text-slate-400 hover:cursor-pointer">{cnt}</p>
+                        <div className="flex flex-row gap-2 items-center">
+                            < ShoppingCart onClick={() => dispatch(setOpen(true))} className="hover:cursor-pointer" />
+                            <Avatar />
+                        </div>
+                    </div>
                 ) : (
                     <Link
                         to={"/auth/login"}

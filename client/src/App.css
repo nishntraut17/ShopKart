@@ -27,6 +27,9 @@
 .App-link {
   color: #61dafb;
 }
+.scroll-container {
+  height: 100vh; /* Adjust the height as needed */
+}
 
 @keyframes App-logo-spin {
   from {

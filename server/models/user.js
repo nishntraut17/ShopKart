@@ -9,6 +9,15 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    mobile: {
+        type: String,
+    },
+    address: {
+        type: String,
+    },
+    gender: {
+        type: String,
+    },
     password: {
         type: String, required: true
     },
@@ -18,7 +27,6 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'consumer', 'seller', 'pseudoSeller'],
         default: 'consumer',
     },
 

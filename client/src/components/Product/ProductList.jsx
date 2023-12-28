@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Card from '../Card/Card';
 import ComponentLoading from '../loading/ComponentLoading';
+import { Slider } from '@mui/material';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -25,6 +26,10 @@ const ProductList = () => {
         setSelectedCategory(event.target.value);
     }
 
+    function valuetext(value) {
+        return `${value}°C`;
+    }
+
     useEffect(() => {
         const newFilteredData = products?.filter((element) =>
             element.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -34,6 +39,7 @@ const ProductList = () => {
         })
         setFilteredData(categoriesFilter);
     }, [searchTerm, products, selectedCategory]);
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -68,6 +74,16 @@ const ProductList = () => {
                             placeholder={`Search Products...`}
                         />
                     </div>
+                    <Slider
+                        aria-label="Temperature"
+                        defaultValue={30}
+                        getAriaValueText={valuetext}
+                        valueLabelDisplay="auto"
+                        step={10}
+                        marks
+                        min={10}
+                        max={110}
+                    />
                     <select id="categoryFilter" value={selectedCategory} onChange={handleCategoryChange} className='h-10 '>
                         <option value="">All Categories</option>
                         {categoryOptions.map((category, index) => (
@@ -77,13 +93,14 @@ const ProductList = () => {
 
                         ))}
                     </select>
+
                 </div>
                 <h2 className="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
 
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                     {filteredData.map((product, id) => (
                         <Link to={`/product/${product._id}`} id={id}>
-                            <Card name={product.name} image={product.productImage} price={product.price} />
+                            <Card name={product.name} image={product.productImages[0]} price={product.price} />
                         </Link>
                     ))}
                 </div>

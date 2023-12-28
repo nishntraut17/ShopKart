@@ -101,7 +101,7 @@ const Avatar = () => {
             >
                 <MenuItem>
                     <Link
-                        to={"/profile"}
+                        to={`/profile/${decoded.userId}`}
                         className="flex items-center"
                     >
                         <MuiAvatar

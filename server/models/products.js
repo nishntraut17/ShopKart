@@ -15,9 +15,9 @@ const productSchema = mongoose.Schema({
     brand: {
         type: String,
     },
-    productImage: {
+    productImages: [{
         type: String
-    },
+    }],
     ratings: [
         {
             user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

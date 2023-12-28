@@ -12,7 +12,7 @@ const getAllOrders = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ user: req.user }).populate("product", ["name", "price", "productImage"]);
+        const orders = await Order.find({ user: req.user }).populate("product", ["_id", "name", "price", "productImages"]);
         return res.send(orders);
     } catch (error) {
         res.status(500).send(error);

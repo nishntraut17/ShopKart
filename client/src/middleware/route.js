@@ -21,7 +21,7 @@ export const Public = ({ children }) => {
 export const Seller = ({ children }) => {
     const user = jwtDecode(localStorage.getItem("token"));
 
-    if (user.role === 'seller') {
+    if (user.role === 'seller' || user.role === 'admin') {
         return children;
     }
     return (

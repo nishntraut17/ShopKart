@@ -1,21 +1,48 @@
-import React, { useState } from 'react';
-import { selectCurrentUser, setUserInfo } from '../../features/auth/authSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { setUserInfo } from '../../features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import ComponentLoading from "../../components/loading/ComponentLoading";
 
 const UpdateProfile = () => {
+    const { id } = useParams();
+    const [user, setUser] = useState(null);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const user = useSelector(selectCurrentUser);
     const [file, setFile] = useState("");
     const [info, setInfo] = useState({
-        name: user.name,
-        email: user.email,
+        name: user?.name,
+        email: user?.email,
+        mobile: user?.mobile,
+        address: user?.address,
+        gender: user?.gender,
         password: ""
     });
+
+    useEffect(() => {
+        setLoading(true)
+        const getUser = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:5000/api/user/${id}`, {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`
+                    }
+                })
+                setUser(data);
+                console.log(data);
+            } catch (error) {
+                console.log(error);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        getUser();
+    }, [id, setUser]);
+
     const onUpload = async (element) => {
         setLoading(true);
         if (element.type === "image/jpeg" || element.type === "image/png") {
@@ -40,7 +67,7 @@ const UpdateProfile = () => {
             if (loading) return;
             if (file === "") return;
 
-            const { name, email, password } = info;
+            const { name, email, password, address, mobile } = info;
             if (!email || !password || !name) {
                 return toast.error("Input field should not be empty");
             } else if (password.length < 5) {
@@ -49,8 +76,8 @@ const UpdateProfile = () => {
 
             await toast.promise(
 
-                axios.put("http://localhost:5000/api/user", {
-                    name, email, password, profileImage: file
+                axios.put(`http://localhost:5000/api/user/${id}`, {
+                    name, email, password, address, mobile, profileImage: file
                 }, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem('token')}`
@@ -63,7 +90,7 @@ const UpdateProfile = () => {
                 }
             );
             dispatch(setUserInfo({ name: info.name, email: info.email, profileImage: file, userId: user.userId }))
-            return navigate("/profile");
+            return navigate(`/profile/${id}`);
         } catch (error) {
             console.log('Error', error);
         }
@@ -71,6 +98,10 @@ const UpdateProfile = () => {
 
     const handleChange = (e) => {
         setInfo({ ...info, [e.target.name]: e.target.value })
+    }
+
+    if (loading) {
+        return <ComponentLoading />
     }
 
     return (
@@ -81,6 +112,12 @@ const UpdateProfile = () => {
                 <input type='text' name="name" value={info.name} onChange={handleChange} />
                 <label>Email</label>
                 <input type='email' name="email" value={info.email} onChange={handleChange} />
+                <label>Mobile</label>
+                <input type='number' name="mobile" value={info.mobile} onChange={handleChange} />
+                <label>Address</label>
+                <input type='text' name="address" value={info.address} onChange={handleChange} />
+                <label>Gender</label>
+
                 <label>Password</label>
                 <input type='password' name="password" value={info.password} onChange={handleChange} />
 

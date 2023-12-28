@@ -1,23 +1,51 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from "../../features/auth/authSlice";
-import { Link } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+import ComponentLoading from "../../components/loading/ComponentLoading";
 const Profile = () => {
-    const user = useSelector(selectCurrentUser);
-    console.log(user);
+    const { id } = useParams();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setLoading(true)
+        const getUser = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:5000/api/user/${id}`, {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`
+                    }
+                })
+                console.log(data);
+                setUser(data);
+            } catch (error) {
+                console.log(error);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        getUser();
+    }, [id]);
+
+    if (loading) {
+        return <ComponentLoading />
+    }
     return (
         <div className='flex flex-col gap-16'>
             <div className='flex flex-row gap-8 justify-center'>
                 <div className='flex flex-col'>
-                    <div>User name: {user.name}</div>
-                    <div>Email: {user.email}</div>
+                    <div>User name: {user?.name}</div>
+                    <div>Email: {user?.email}</div>
+                    <div>Mobile: {user?.mobile}</div>
+                    <div>Address: {user?.address}</div>
+                    <div>Gender: {user?.gender}</div>
                 </div>
                 <div className='w-20 h-20'>
-                    <img src={user.profileImage} alt="profile" />
+                    <img src={user?.profileImage} alt="profile" />
                 </div>
+
             </div>
-            <Link to="/profile/updateprofile" className='flex justify-center'>
+            <Link to={`/profile/updateprofile/${id}`} className='flex justify-center'>
                 <button className='bg-slate-400 border-slate-400 hover:border-slate-500 rounded-md p-2'>
                     Update Profile
                 </button>

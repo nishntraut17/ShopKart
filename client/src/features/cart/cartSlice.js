@@ -39,3 +39,4 @@ export const { addToCart, removeFromCart, removeSingleItem, emptyCart, setOpen }
 export default cartSlice.reducer;
 export const selectCartItems = (state) => state.cart.items;
 export const selectCartOpen = (state) => state.cart.open;
+export const itemCount = (state) => state.cart.items.length;

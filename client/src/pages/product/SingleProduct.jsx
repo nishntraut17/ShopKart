@@ -1,105 +1,30 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { addToCart, setOpen } from '../../features/cart/cartSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { Rating } from '@mui/material';
-import Comment from '../../components/comment/Comment';
 import NoData from "../../components/noData/NoData";
-// import Input from "../../components/input/Input";
-// import ShareButton from "../../components/shareButton/ShareButton";
 import ComponentLoading from "../../components/loading/ComponentLoading";
-// import { selectCurrentUser } from "../../features/auth/authSlice";
-
-// import { FaRegPaperPlane } from "react-icons/fa";
-// import { LuChefHat } from "react-icons/lu";
-// import { BsStopwatch } from "react-icons/bs";
-// import { LiaWeightSolid } from "react-icons/lia";
-// import { AiOutlineHeart, AiFillHeart, AiOutlineUser } from "react-icons/ai";
-// import {
-//     useGetProductQuery,
-//     useRateProductMutation,
-//     useCommentProductMutation,
-//     useDeleteCommentProductMutation,
-// } from "../../features/products/productApiSlice";
-// import Category from '../../components/Home/Category';
 import SameCategory from '../../components/Product/SameCategory';
+import { Avatar as MuiAvatar } from '@mui/material';
+import ProductFeature from '../../static/productFeature.png';
+import Brand from "../../static/brand.png";
+import TopBrand from '../../static/topbrand.png';
 
 const SingleProduct = () => {
-    // const [rating, setRating] = useState(0);
-    // const [similarCategory, setSimilarCategory] = useState([]);
-    // const [similarBrand, setSimilarBrand] = useState([]);
+    const [activeImgIndex, setActiveImgIndex] = useState(0);
     const { id } = useParams();
     const dispatch = useDispatch();
-    // const [anchorEl, setAnchorEl] = useState(null);
-    // const open = Boolean(anchorEl);
-    // const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [product, setProduct] = useState({});
 
-    // const [rateProduct] = useRateProductMutation();
-    // const [commentProduct, { isLoading }] = useCommentProductMutation();
-    // const [deleteComment] = useDeleteCommentProductMutation();
-    // const [toggleFavorite] = useToggleFavoriteMutation();
-
-    // const user = useSelector(selectCurrentUser);
-    // const [message, setMessage] = useState("");
-
-    // const sumOfRatings = product.rating ? product?.ratings?.reduce(
-    //     (sum, item) => sum + item.rating, 0
-    // ) : 0;
-    // const averageRating = sumOfRatings === 0 ? 0 : sumOfRatings / product?.ratings.length;
-
-    // const handleChange = (e) => {
-    //     setMessage(e.target.value);
-    // }
-
-    // const handleRating = async (event, newValue) => {
-    //     try {
-    //         if (!user) {
-    //             toast.error("You must sign in first");
-    //             return navigate("/auth/signin");
-    //         }
-    //         setRating(newValue);
-    //         await toast.promise(
-    //             rateProduct({ rating: newValue, recipeId: id }).unwrap(),
-    //             {
-    //                 loading: "Please wait...",
-    //                 success: "Rating added successfully",
-    //                 error: "You have already rating this recipe",
-    //             }
-    //         );
-    //     } catch (error) {
-    //         toast.error(error.data);
-    //         console.error(error);
-    //     }
-    // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         await toast.promise(
-    //             commentProduct({ productId: id, comment: message }).unwrap(),
-    //             {
-    //                 loading: "Please wait...",
-    //                 success: "Comment added",
-    //                 error: "Could not add comment",
-    //             }
-    //         );
-    //         setMessage("");
-    //     } catch (error) {
-    //         toast.error(error.data);
-    //         console.error(error);
-    //     }
-    // };
-
-    // const handleMenu = (event) => {
-    //     setAnchorEl(event.currentTarget);
-    // }
-    // const handleMenuClose = () => { setAnchorEl(null) };
+    const sumOfRatings = product.ratings ? product?.ratings?.reduce(
+        (sum, item) => sum + item.rating, 0
+    ) : 0;
+    const averageRating = sumOfRatings === 0 ? 0 : sumOfRatings / product?.ratings.length;
 
 
     const handleAddToCart = () => {
@@ -130,26 +55,51 @@ const SingleProduct = () => {
     }
 
     return (
-        <div className="p-8 flex flex-col gap-4">
-            <div className='flex flex-col md:flex-row gap-4'>
-                <img src={product.productImage} alt={product.name} className='max-w-lg' />
-                <div className='flex flex-col gap-5'>
-                    <div className='flex flex-row'>
+        <div className="p- flex flex-col gap-4">
+            <div className='flex flex-col md:flex-row gap-4 lg:px-24'>
+                <div className='flex flex-row sm:flex-col gap-1'>
+                    {
+                        product?.productImages?.map((productImage, i) => {
+                            return (
+                                <div className='h-20 w-20'>
+                                    <img key={i} src={productImage} alt='product'
+                                        onClick={() => { setActiveImgIndex(i) }}
+                                        className={`h-full w-full object-cover rounded-lg shadow-md cursor-pointer z-10 ${activeImgIndex === i
+                                            ? 'border border-primary' : ''}`} />
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                <div className='h-1/4 w-3/4'>
+                    <img src={product.productImages[activeImgIndex]} alt={product.name} className='max-w-lg border-2 rounded' />
+                </div>
+                <div className='flex flex-col gap-5 '>
+                    <div className='flex flex-row items-center'>
                         <p className="flex items-center text-lg font-semibold">{product.name}</p>
                         <Rating
-                            value={5}
-                            size={"medium"}
+                            value={averageRating}
+                            size={"small"}
                             className='p-3'
                             readOnly
                         />
+                        <p className='text-gray-500'>{product.ratings.length} ratings</p>
                     </div>
-                    <div className=''>
-                        <p className=''>Brand</p>
-                        <h1 className="">{product.brand}</h1>
-                    </div>
-                    <h1 className=""> {product.category}</h1>
+
+                    <h1 className="">Category: {product.category}</h1>
                     <p className="">₹ {product.price}</p>
                     <h1 className=""> {product.description}</h1>
+                    <div className='h-16 w-auto'>
+                        <img src={ProductFeature} alt="features" className='h-full' />
+                    </div>
+                    <div className=''>
+                        <div className='flex flex-row'>
+                            <img src={TopBrand} alt='top brand' className='h-4 w-auto' />
+                            <h1 className="text-bold">{product.brand}</h1>
+                        </div>
+                        <img src={Brand} alt='brand' className='h-20 w-auto' />
+                    </div>
+                    <hr />
                     <div className='flex flex-row gap-4'>
                         <button
                             onClick={handleAddToCart}
@@ -159,63 +109,34 @@ const SingleProduct = () => {
                         </button>
 
                     </div>
-                    {/* {!product?.ratings?.some((obj) => obj.user === user?.userId) && (
-                        <>
-                            <div className="my-4 w-full mx-auto flex justify-start gap-6">
-                                <p className="text-sm font-semibold mb-3">Rate the Product</p>
-                                <Rating
-                                    size={"large"}
-                                    precision={0.25}
-                                    value={rating}
-                                    onChange={handleRating}
-                                />
-                            </div>
 
-                        </>
-                    )} */}
-                    {/* <form
-                        className="flex flex-col gap-4"
-                        onSubmit={handleSubmit}
-                    >
-                        <div className="flex flex-row relative gap-10 my-10">
-                            <label
-                                htmlFor="message"
-                                className="text-sm font-semibold mb-3"
-                            >
-                                Leave a Review
-                            </label>
-                            <input type="text"
-                                onChange={handleChange}
-                                value={message}
-                                id="message"
-                                aria-required="true"
-                                placeholder="Leave a comment..."
-                                className="py-2 px-4 border bg-gray-100 rounded-lg focus:outline outline-primary"
-                            />
-                            <button className='bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300'>Post Review</button>
-                        </div>
-                    </form> */}
                 </div>
-
             </div>
-            {/* Recipe comment form */}
-            <div className="w-full sm:w-4/5 mx-auto flex flex-col gap-1 border-2 border-gray-100 bg-gray-100 rounded-md p-2 md:scale-100">
-                <h3 className="font-semibold text-lg m-6">All Reviews</h3>
-                {product?.comments?.length ? (
-                    <div className="flex flex-col gap-2">
-                        {product?.comments?.map((comment) => (
-                            <Comment
-                                key={comment?._id}
-                                comment={comment}
-                                userId={product?.userId}
-                            />
-                        ))}
+            <div className="flex flex-col gap-1 p-12 lg:px-20">
+                <hr />
+                <div className='text-bold text-xl p-4'>All Reviews</div>
+                {product?.comments?.map((comment, i) => (
+                    <div className='flex flex-row border-2 border-gray-200 rounded-xl gap-4 p-2 lg:ml-24 items-center'>
+                        <MuiAvatar
+                            alt={comment?.user?.name}
+                            src={comment?.user?.profileImage}
+                            sx={{ width: 30, height: 30 }}
+                            className="border-2"
+                        />
+                        <p>{comment?.user?.name}</p>
+                        <Rating
+                            size={"small"}
+                            precision={0.25}
+                            readOnly
+                            value={product.ratings[i].rating}
+                        />
+                        <p>{comment?.comment}</p>
                     </div>
-                ) : (
-                    <NoData text={"Comments"} />
-                )}
+                ))}
             </div>
-            <SameCategory category={product.category} />
+            <div className='lg:px-20'>
+                <SameCategory category={product.category} prod={product} />
+            </div>
         </div>
     );
 };

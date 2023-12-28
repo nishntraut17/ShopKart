@@ -76,7 +76,7 @@ const CheckoutPage = () => {
                                 <h1>{item.name}</h1>
                                 <h1>₹ {item.price}</h1>
                             </div>
-                            <img src={item.productImage} alt="cart-item" className='h-20 w-20' />
+                            <img src={item.productImages[0]} alt="cart-item" className='h-20 w-20' />
                         </div>
                         <div>
                             <h1>Quantity: {item.quantity}</h1>

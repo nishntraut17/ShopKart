@@ -63,16 +63,23 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
-        console.log(req.user);
         console.log(req.body);
-        const user = await User.find({ _id: req.user });
+
+        const user = await User.findOne({ _id: req.params.id });
         if (!user) {
             res.send("No such user exist");
         }
-        const updatedUser = await User.findAndUpdate({ _id: user }, { email: req.body.email, name: req.body.name, password: req.body.password, profileImage: req.body.profileImage })
-        if (!updateUser) {
-            res.send("Problem while updating user");
-        }
+        console.log(user);
+        user.email = req.body.email;
+        user.name = req.body.name;
+        user.profileImage = req.body.profileImage;
+        user.gender = req.body.gender;
+        user.mobile = req.body.mobile;
+        user.address = req.body.address;
+        const hashedPass = await bcrypt.hash(req.body.password, 10);
+        user.password = hashedPass;
+        await user.save();
+        console.log(user);
         res.status(201).send("User Updated");
     } catch (error) {
         res.send(error);
@@ -82,7 +89,7 @@ const updateUser = async (req, res) => {
 const reqToBecomeSeller = async (req, res) => {
     try {
         console.log(req.user);
-        const user = await User.find({ _id: req.user });
+        const user = await User.findOne({ _id: req.user });
         console.log(user);
         if (!user) {
             res.send("No such user exist");
@@ -97,4 +104,59 @@ const reqToBecomeSeller = async (req, res) => {
     }
 }
 
-module.exports = { register, login, getAllUsers, updateUser, reqToBecomeSeller };
+const getPseudoSeller = async (req, res) => {
+    try {
+        const users = await User.find({ role: "pseudoSeller" });
+        console.log(users);
+        return res.send(users);
+    } catch (error) {
+        res.status(500).send("Unable to get all users");
+    }
+}
+
+
+const updateApplication = async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.userId });
+        console.log(req.params.userId);
+        if (!user) {
+            res.send("No such user exist");
+        }
+        user.role = req.body.role;
+        await user.save();
+        console.log(user);
+
+        res.status(201).send("Req accepted successfully");
+    } catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+}
+
+const deleteUser = async (req, res) => {
+    try {
+        let user = await User.findByIdAndDelete(req.params.userId);
+        if (!user) {
+            return res.status(400).json({ msg: "User not found!" });
+        }
+        res.json({ msg: "User deleted Successfully" });
+
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+const getUser = async (req, res) => {
+    try {
+        let user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(400).json({ msg: "User not found!" });
+        }
+        res.send(user);
+
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+module.exports = { register, login, getAllUsers, updateUser, reqToBecomeSeller, getPseudoSeller, updateApplication, deleteUser, getUser };
