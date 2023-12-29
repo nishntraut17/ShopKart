@@ -2,7 +2,7 @@ const Product = require('../models/products');
 
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('seller', ['name']);
         return res.status(200).send(products);
     } catch (error) {
         console.log(error);
@@ -21,7 +21,7 @@ const getProductsByCategory = async (req, res) => {
 
 const getOneProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('comments.user', ['name', 'profileImage']);
+        const product = await Product.findById(req.params.id).populate('comments.user', ['name', 'profileImage']).populate('seller', ['name']);
         if (!product) {
             return res.status(400).send("No such Product");
         }
@@ -34,9 +34,7 @@ const getOneProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const user = req.user;
-        console.log(req.body);
-        const newProduct = new Product({ name: req.body.name, price: req.body.price, description: req.body.description, brand: req.body.brand, category: req.body.category, productImages: req.body.productImages });
+        const newProduct = new Product({ name: req.body.name, price: req.body.price, description: req.body.description, brand: req.body.brand, category: req.body.category, productImages: req.body.productImages, seller: req.user });
         await newProduct.save();
         res.status(201).send(newProduct);
     } catch (error) {
@@ -65,13 +63,14 @@ const updateProduct = async (req, res) => {
         ) {
             return res.status(422).json({ message: "Insufficient data" });
         }
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            {
-                ...req.body,
-            },
-            { new: true }
-        );
+        const product = await Product.findOne({ _id: req.params.id });
+        product.name = name;
+        product.price = price;
+        product.category = category;
+        product.description = description;
+        product.brand = brand;
+        product.productImages = productImages;
+        await product.save();
         res.status(201).json(product);
     } catch (error) {
         next(error);

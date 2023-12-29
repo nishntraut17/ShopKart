@@ -1,194 +1,219 @@
-// import React, { useState } from "react";
-// import uploadImage from "../../common/uploadImage";
-// import { LinearProgress } from "@mui/material";
-// import toast from "react-hot-toast";
-// import {
-//   useGetProductQuery,
-//   useUpdateProductMutation,
-// } from "../../features/product/productApiSlice";
-// import { useParams } from "react-router-dom";
-// import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import axios from 'axios'
+import { useNavigate, useParams } from 'react-router-dom';
+import ComponentLoading from "../../components/loading/ComponentLoading";
 
-// const UpdateProduct = () => {
-//   const { id } = useParams();
-//   const navigate = useNavigate();
+function AddProduct() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [formDetails, setFormDetails] = useState({});
 
-//   const { data } = useGetProductQuery(id);
-//   const [updateProduct] = useUpdateProductMutation();
+  useEffect(() => {
+    setLoading(true)
+    const getUser = async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:5000/api/product/${id}`, {
+          headers: {
+            'authorization': `Bearer ${localStorage.getItem("token")}`
+          }
+        })
+        setFormDetails({
+          name: data.name,
+          price: data.price,
+          brand: data.brand,
+          category: data.category,
+          description: data.description,
+        });
+        setFiles(data.productImages);
+        setImagePreviews(data.productImages);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+      finally {
+        setLoading(false);
+      }
+    }
+    getUser();
+  }, [id]);
 
-//   const [formDetails, setFormDetails] = useState({
-//     name: data?.name || "",
-//     productImage: data?.productImage || "",
-//     description: data?.description || "",
-//     category: data?.category || "",
-//     brand: data?.brand || "",
-//   });
+  const handleImageChange = (elements) => {
+    const newPreviews = Array.from(elements).map(element => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(element);
+      });
+    });
 
-//   const [progress, setProgress] = useState(0);
+    Promise.all(newPreviews).then((previews) => {
+      setImagePreviews((prevPreviews) => [...prevPreviews, ...previews]);
+    });
+  };
 
-//   const handleChange = (e) => {
-//     if (e.target.id === "image") {
-//       uploadImage(e, setProgress, setFormDetails, formDetails);
-//     } else {
-//       setFormDetails({ ...formDetails, [e.target.id]: e.target.value });
-//     }
-//   };
+  const inputChange = (e) => {
+    const { name, value } = e.target;
+    return setFormDetails({
+      ...formDetails,
+      [name]: value,
+    });
+  };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
+  const onUpload = async (elements) => {
+    setLoading(true);
+    handleImageChange(elements);
 
-//     if (!formDetails.productImage) return toast.error("Upload product image");
-//     if (!formDetails.ingredients.length)
+    const uploadPromises = Array.from(elements).map((element) => {
+      if (element.type === "image/jpeg" || element.type === "image/png") {
+        const data = new FormData();
+        data.append("file", element);
+        data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
+        data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
+        return fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
+          method: "POST",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((data) => data.url.toString());
+      } else {
+        return Promise.resolve(null);
+      }
+    });
 
-//     try {
-//       const product = await toast.promise(
-//         updateProduct({ ...formDetails, productId: id }).unwrap(),
-//         {
-//           pending: "Please wait...",
-//           success: "Product updated successfully",
-//           error: "Unable to Update Product",
-//         }
-//       );
-//       navigate(`/product/${id}`);
-//     } catch (error) {
-//       toast.error(error.data);
-//       console.error(error);
-//     }
-//   };
+    const uploadedFiles = await Promise.all(uploadPromises);
 
-//   return (
-//     <section className="box flex flex-col gap-6">
-//       <h2 className="font-bold text-xl">Add New Product</h2>
-//       <hr />
+    setFiles((prevFiles) => [...prevFiles, ...uploadedFiles.filter(file => file !== null)]);
+    setLoading(false);
+  };
 
-//         <form
-//           className="flex flex-col-reverse md:flex-row gap-4 mt-10 justify-around"
-//           onSubmit={handleSubmit}
-//         >
-//           <div className="basis-1/2 flex flex-col gap-5">
-//             <div className="flex flex-col sm:flex-row justify-between">
-//               <label
-//                 htmlFor="title"
-//                 className="text-sm font-semibold mb-3 basis-1/2"
-//               >
-//                 Product name
-//               </label>
-//               <div className="flex flex-col basis-1/2">
-//                 <input
-//                   type="text"
-//                   onChange={handleChange}
-//                   value={formDetails.name}
-//                   id="title"
-//                   name="title"
-//                   pattern={"^.{3,}$"}
-//                   required
-//                   aria-required="true"
-//                   placeholder="Enter recipe name"
-//                   className="p-1.5 border bg-gray-100 rounded focus:outline outline-primary"
-//                 />
-//               </div>
-//             </div>
-//             <hr />
-//             <div className="flex flex-col sm:flex-row justify-between">
-//               <label
-//                 htmlFor="description"
-//                 className="text-sm font-semibold mb-3 basis-1/2"
-//               >
-//                 Product description
-//               </label>
-//               <div className="flex flex-col basis-1/2">
-//                 <input
-//                   type="text"
-//                   onChange={handleChange}
-//                   value={formDetails.description}
-//                   id="description"
-//                   required
-//                   name="description"
-//                   rows="5"
-//                   aria-required="true"
-//                   placeholder="Enter your description here..."
-//                   className="p-1.5 border bg-gray-100 rounded focus:outline outline-primary w-full resize-none"
-//                 ></input>
-//               </div>
-//             </div>
-//             <hr />
-//             <div className="flex flex-col sm:flex-row justify-between">
-//               <label
-//                 htmlFor="category"
-//                 className="text-sm font-semibold mb-3 basis-1/2"
-//               >
-//                 Category
-//               </label>
-//               <div className="flex flex-col basis-1/2">
-//                 <input
-//                   type="number"
-//                   onChange={handleChange}
-//                   value={formDetails.calories}
-//                   id="category"
-//                   required
-//                   name="category"
-//                   aria-required="true"
-//                   placeholder="Enter total calories"
-//                   className="p-1.5 border bg-gray-100 rounded focus:outline outline-primary"
-//                 />
-//               </div>
-//             </div>
-//             <hr />     
-//             <button
-//               type="submit"
-//               className="rounded px-4 py-1 max-w-max"
-//             >
-//                 Update Changes
-//             </button>
-//           </div>
-//           <hr className="block md:hidden mt-6" />
-//           {/* Upload recipe image */}
-//           <div className="basis-1/3 rounded-xl shadow-md hover:shadow-primary hover:shadow flex justify-center items-center w-full p-8 max-h-[300px]">
-//             <label
-//               htmlFor="image"
-//               className="font-bold cursor-pointer flex flex-col justify-center items-center w-full"
-//             >
-//               <div
-//                 className={formDetails.image ? "w-[65%] mb-2" : "w-[30%] mb-6"}
-//               >
-//                 {progress > 0 && progress < 100 ? (
-//                   <LinearProgress
-//                     variant="determinate"
-//                     value={progress}
-//                     color="warning"
-//                   />
-//                 ) : (
-//                   <img
-//                     src={formDetails.productImage}
-//                     alt="upload"
-//                     className="w-full "
-//                   />
-//                 )}
-//               </div>
-//               <p className="text-center">
-//                 Drag your image here, or
-//                 <span className="text-primary"> browse</span>
-//               </p>
-//             </label>
-//             <input
-//               type="file"
-//               id="image"
-//               className="hidden"
-//               onChange={handleChange}
-//             />
-//           </div>
-//         </form>
-//     </section>
-//   );
-// };
+  const formSubmit = async (e) => {
+    try {
+      e.preventDefault();
 
-// export default UpdateProduct
-import React from 'react'
+      if (loading) return;
+      if (files.length === 0) return;
 
-const UpdateProduct = () => {
+      const { name, price, description, brand, category } = formDetails;
+      console.log(formDetails);
+      const response = await toast.promise(
+        axios.put(`http://localhost:5000/api/product/${id}`, {
+          name,
+          price,
+          description,
+          brand,
+          category,
+          productImages: files,
+        }, {
+          headers: {
+            'authorization': `Bearer ${localStorage.getItem("token")}`
+          }
+        }),
+        {
+          loading: "loading...",
+          success: "successful",
+          error: "failed",
+        }
+      );
+      navigate('/');
+      console.log(response);
+    } catch (error) { }
+  };
+
+  if (loading) {
+    return <ComponentLoading />
+  }
+
   return (
-    <div>UpdateProduct</div>
-  )
+    <div className="">
+      <h2 className="px-10 text-bold text-2xl">Add New Product</h2>
+      <form
+        onSubmit={formSubmit}
+        className="flex flex-col p-10 gap-4 justify-center"
+      >
+        <div className="flex flex-col lg:flex-row gap-4">
+          <label>Enter Product Name:</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter product name"
+            value={formDetails.name}
+            onChange={inputChange}
+          />
+          <label>Enter Price:</label>
+          <input
+            type="text"
+            name="price"
+
+            placeholder="Enter price"
+            value={formDetails.price}
+            onChange={inputChange}
+          />
+          <label>Enter Brand:</label>
+          <input
+            type="text"
+            name="brand"
+
+            placeholder="Enter brand"
+            value={formDetails.brand}
+            onChange={inputChange}
+          />
+          <label>Enter Category:</label>
+          <input
+            type="text"
+            name="category"
+
+            placeholder="Enter Category"
+            value={formDetails.category}
+            onChange={inputChange}
+          />
+        </div>
+        <div className="flex flex-col lg:flex-row gap-4 w-96">
+
+          <label>Enter Description:</label>
+          <textarea
+            type="text"
+            name="description"
+
+            placeholder="Enter description"
+            value={formDetails.description}
+            onChange={inputChange}
+          />
+        </div>
+        <div className="flex">
+          <label>Upload product Images:</label>
+          <input
+            type="file"
+            onChange={(e) => onUpload(e.target.files)}
+            name="profile-pic"
+            id="profile-pic"
+          />
+          {imagePreviews.map((preview, index) => (
+            <div key={index}>
+              <img
+                src={preview}
+                alt={`Preview ${index}`}
+                style={{ maxWidth: '100%', maxHeight: '200px' }}
+              />
+            </div>
+          ))}
+        </div>
+
+
+        <button
+          type="submit"
+          className="bg-slate-200 border-2 rounded-lg p-2"
+        >
+          Upload
+        </button>
+      </form>
+    </div>
+  );
 }
 
-export default UpdateProduct
+export default AddProduct;

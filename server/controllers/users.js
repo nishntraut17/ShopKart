@@ -88,32 +88,19 @@ const updateUser = async (req, res) => {
 
 const reqToBecomeSeller = async (req, res) => {
     try {
-        console.log(req.user);
-        const user = await User.findOne({ _id: req.user });
+        const user = await User.findOne({ _id: req.params.id });
         console.log(user);
         if (!user) {
             res.send("No such user exist");
         }
-        // const updatedUser = await User.findAndUpdate({ _id: user }, { })
         user.role = 'pseudoSeller';
         await user.save();
-        // const result = await User.findAndUpdate({})
+        console.log(user);
         res.status(201).send("Req send successfully");
     } catch (error) {
         res.send(error);
     }
 }
-
-const getPseudoSeller = async (req, res) => {
-    try {
-        const users = await User.find({ role: "pseudoSeller" });
-        console.log(users);
-        return res.send(users);
-    } catch (error) {
-        res.status(500).send("Unable to get all users");
-    }
-}
-
 
 const updateApplication = async (req, res) => {
     try {
@@ -159,4 +146,4 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = { register, login, getAllUsers, updateUser, reqToBecomeSeller, getPseudoSeller, updateApplication, deleteUser, getUser };
+module.exports = { register, login, getAllUsers, updateUser, reqToBecomeSeller, updateApplication, deleteUser, getUser };

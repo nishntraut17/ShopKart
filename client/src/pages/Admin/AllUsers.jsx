@@ -3,10 +3,14 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ComponentLoading from '../../components/loading/ComponentLoading';
 import NoData from "../../components/noData/NoData";
+import { selectCurrentUser } from "../../features/auth/authSlice";
+import { useSelector } from 'react-redux'
+import { Link } from "react-router-dom";
 
 const AllUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const currentUser = useSelector(selectCurrentUser);
 
     const getAllApp = async (e) => {
         try {
@@ -16,8 +20,10 @@ const AllUsers = () => {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
             })
-
-            setUsers(data);
+            const filterData = data.filter((ele) => {
+                return ele._id !== currentUser.userId;
+            })
+            setUsers(filterData);
             setLoading(false)
         } catch (error) { console.log(error) }
     };
@@ -60,54 +66,64 @@ const AllUsers = () => {
                 <section className="">
                     <h3 className="bg-[#f4f4f4] p-4 border-gray-200 ">All Users</h3>
                     {users.length > 0 ? (
-                        <div className="">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Pic</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Roles</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users?.map((ele, i) => {
-                                        return (
-                                            <tr key={ele?._id}>
-                                                <td>{i + 1}</td>
-                                                <td>
+                        <table className="text-gray-600 border-gray-200">
+                            <thead>
+                                <tr className="">
+                                    <th className="px-4 py-2">S.No</th>
+                                    <th className="px-4 py-2">Pic</th>
+                                    <th className="px-4 py-2">Name</th>
+                                    <th className="px-4 py-2">Email</th>
+                                    <th className="px-4 py-2">Mobile</th>
+                                    <th className="px-4 py-2">Roles</th>
+                                    <th className="px-4 py-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="">
+                                {users?.map((ele, i) => {
+                                    return (
+                                        <tr key={ele?._id} className="">
+                                            <td className="px-4 py-2">{i + 1}</td>
+                                            <td className="px-4 py-2">
+                                                <Link to={`/profile/${ele?._id}`}>
                                                     <img
-                                                        className="h-20 w-20"
+                                                        className="h-20 w-20 border-2 rounded-md"
                                                         src={
                                                             ele?.profileImage ||
                                                             "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
                                                         }
                                                         alt={ele?._id}
                                                     />
-                                                </td>
-                                                <td>{ele?.name}</td>
-                                                <td>{ele?.email}</td>
-                                                <td>{ele?.role}</td>
-                                                <td className="">
+                                                </Link>
+                                            </td>
+                                            <td className="px-4 py-2">{ele?.name}</td>
+                                            <td className="px-4 py-2">{ele?.email}</td>
+                                            <td className="px-4 py-2">{ele?.mobile}</td>
+                                            <td className="px-4 py-2">{ele?.role}</td>
+                                            <td className="px-4 py-2 flex gap-1 items-center justify-center">
+                                                <Link to={`/profile/updateprofile/${ele?._id}`}>
                                                     <button
-                                                        className=""
-                                                        onClick={() => {
-                                                            deleteUser(ele?._id);
-                                                        }}
+                                                        className="border-3 border-gray-400 bg-gray-200 rounded p-1"
                                                     >
-                                                        Delete
+                                                        Update
                                                     </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
+                                                </Link>
+                                                <button
+                                                    className="border-3 border-gray-400 bg-gray-200 rounded p-1"
+                                                    onClick={() => {
+                                                        deleteUser(ele?._id);
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     ) : (
-                        <NoData />
+                        <NoData text={"User"} />
                     )}
                 </section>
             )}

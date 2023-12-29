@@ -1,5 +1,5 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { setUserInfo } from '../../features/auth/authSlice';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import axios from 'axios'
@@ -8,19 +8,12 @@ import ComponentLoading from "../../components/loading/ComponentLoading";
 
 const UpdateProfile = () => {
     const { id } = useParams();
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [file, setFile] = useState("");
-    const [info, setInfo] = useState({
-        name: user?.name,
-        email: user?.email,
-        mobile: user?.mobile,
-        address: user?.address,
-        gender: user?.gender,
-        password: ""
-    });
+    const [info, setInfo] = useState({});
 
     useEffect(() => {
         setLoading(true)
@@ -31,7 +24,8 @@ const UpdateProfile = () => {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
                 })
-                setUser(data);
+                setInfo(data);
+                setFile(data.profileImage);
                 console.log(data);
             } catch (error) {
                 console.log(error);
@@ -41,10 +35,11 @@ const UpdateProfile = () => {
             }
         }
         getUser();
-    }, [id, setUser]);
+    }, [id, setInfo]);
 
     const onUpload = async (element) => {
         setLoading(true);
+
         if (element.type === "image/jpeg" || element.type === "image/png") {
             const data = new FormData();
             data.append("file", element);
@@ -89,7 +84,6 @@ const UpdateProfile = () => {
                     loading: "updating user details...",
                 }
             );
-            dispatch(setUserInfo({ name: info.name, email: info.email, profileImage: file, userId: user.userId }))
             return navigate(`/profile/${id}`);
         } catch (error) {
             console.log('Error', error);
@@ -105,33 +99,32 @@ const UpdateProfile = () => {
     }
 
     return (
-        <div>
-            <h1>Update Profile</h1>
-            <form onSubmit={formSubmit}>
+        <div className='text-gray-700'>
+            <h1 className='text-2xl text-bold flex justify-center'>Update Profile</h1>
+            <form onSubmit={formSubmit} className='flex flex-col justify-center px-4 lg:px-56'>
                 <label>Name</label>
-                <input type='text' name="name" value={info.name} onChange={handleChange} />
+                <input type='text' name="name" value={info.name} onChange={handleChange} className='w-96' />
                 <label>Email</label>
-                <input type='email' name="email" value={info.email} onChange={handleChange} />
+                <input type='email' name="email" value={info.email} onChange={handleChange} className='w-96' />
                 <label>Mobile</label>
-                <input type='number' name="mobile" value={info.mobile} onChange={handleChange} />
+                <input type='number' name="mobile" value={info.mobile} onChange={handleChange} className='w-96' />
                 <label>Address</label>
-                <input type='text' name="address" value={info.address} onChange={handleChange} />
-                <label>Gender</label>
+                <input type='text' name="address" value={info.address} onChange={handleChange} className='w-96' />
 
                 <label>Password</label>
-                <input type='password' name="password" value={info.password} onChange={handleChange} />
+                <input type='password' name="password" value={info.password} onChange={handleChange} className='w-96' />
 
-                <label className="block text-sm font-medium leading-6 text-gray-900">
-                    Profile Pic
+                <label className="block text-sm font-medium leading-6 text-gray-700">
+                    Profile Picture
                 </label>
                 <input
                     type="file"
                     onChange={(e) => onUpload(e.target.files[0])}
                     name="profile-pic"
                     id="profile-pic"
-
                 />
-                <button type='submit'>Update</button>
+                <img src={file} alt="profile" className='h-40 w-40' />
+                <button type='submit' className='text-bold bg-gray-200 w-32 border-gray-400 rounded my-10 p-2 hover:bg-gray-300'>Update</button>
             </form>
         </div>
     )

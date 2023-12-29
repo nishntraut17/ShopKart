@@ -2,10 +2,11 @@
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
 import { Rating } from '@mui/material';
+import { useEffect } from 'react';
 
 const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, handleReviewChange, selectedOrder }) => {
     if (!selectedOrder) {
-        return null; // Don't render the modal if no order is selected
+        return null;
     }
 
     return (
@@ -39,23 +40,13 @@ const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, 
                     >
                         <Dialog.Panel className="fixed inset-0 overflow-hidden z-50 flex items-center justify-center">
                             <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all">
-                                {/* Your Modal Content Here */}
                                 <h2 className="text-lg font-medium text-gray-900 px-6 py-4 bg-gray-100 border-b">Rating & Review for {selectedOrder.product.name}</h2>
-                                <div className="p-6">
-                                    {/* Order details, Rating and Review inputs, and buttons */}
+                                <div className="p-6 flex flex-col gap-2 items-start justify-start">
                                     <p>Price: {selectedOrder.product.price}</p>
                                     <p>Quantity: {selectedOrder.quantity}</p>
-                                    {/* ... (other order details) */}
+
                                     <label>
                                         Rating:
-                                        {/* <select value={rating} onChange={(e) => handleRatingChange(parseInt(e.target.value, 10))}>
-                                            <option value={0}>Select Rating</option>
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            <option value={3}>3</option>
-                                            <option value={4}>4</option>
-                                            <option value={5}>5</option>
-                                        </select> */}
                                         <Rating
                                             size={"medium"}
                                             precision={0.25}
@@ -69,8 +60,10 @@ const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, 
                                         <textarea value={review} onChange={(e) => handleReviewChange(e.target.value)}></textarea>
                                     </label>
                                     <br />
-                                    <button onClick={onSubmit}>Submit Rating & Review</button>
-                                    <button onClick={onClose}>Close</button>
+                                    <div className='flex gap-2'>
+                                        <button onClick={onSubmit} className='border-2 border-slate-300 bg-slate-200 rounded-md'>Submit Rating & Review</button>
+                                        <button onClick={onClose} className='border-2 border-slate-300 bg-slate-200 rounded-md'>Close</button>
+                                    </div>
                                 </div>
                             </div>
                         </Dialog.Panel>

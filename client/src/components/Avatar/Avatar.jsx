@@ -129,13 +129,13 @@ const Avatar = () => {
                         </MenuItem>
                         <MenuItem>
                             <Link
-                                to="/product/items-sold"
+                                to="/product/my-items"
                                 className="flex items-center"
                             >
                                 <ListItemIcon>
                                     <FaShopify />
                                 </ListItemIcon>
-                                Items Sold
+                                My Items
                             </Link>
                         </MenuItem>
                     </Box>

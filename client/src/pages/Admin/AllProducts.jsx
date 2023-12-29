@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ComponentLoading from '../../components/loading/ComponentLoading';
 import NoData from "../../components/noData/NoData";
+import { Link } from "react-router-dom";
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -24,7 +25,7 @@ const AllProducts = () => {
 
     const deleteUser = async (userId) => {
         try {
-            const confirm = window.confirm("Are you sure you want to accept?");
+            const confirm = window.confirm("Are you sure you want to Delete?");
             if (confirm) {
                 await toast.promise(
                     axios.delete(
@@ -60,26 +61,26 @@ const AllProducts = () => {
                 <section className="">
                     <h3 className="bg-[#f4f4f4] p-4 border-gray-200 ">All Products</h3>
                     {products.length > 0 ? (
-                        <div className="">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>S.No</th>
-                                        <th>Pic</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Category</th>
-                                        <th>Brand</th>
-                                        <th>Seller</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {products?.map((ele, i) => {
-                                        return (
-                                            <tr key={ele?._id}>
-                                                <td>{i + 1}</td>
-                                                <td>
+                        <table className="text-gray-600 border-gray-200">
+                            <thead>
+                                <tr>
+                                    <th className="px-4 py-2">S.No</th>
+                                    <th className="px-4 py-2">Pic</th>
+                                    <th className="px-4 py-2">Name</th>
+                                    <th className="px-4 py-2">Price</th>
+                                    <th className="px-4 py-2">Category</th>
+                                    <th className="px-4 py-2">Brand</th>
+                                    <th className="px-4 py-2">Seller</th>
+                                    <th className="px-4 py-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products?.map((ele, i) => {
+                                    return (
+                                        <tr key={ele?._id}>
+                                            <td className="px-4 py-2">{i + 1}</td>
+                                            <td className="px-4 py-2">
+                                                <Link to={`/product/${ele?._id}`}>
                                                     <img
                                                         className="h-20 w-20"
                                                         src={
@@ -88,30 +89,32 @@ const AllProducts = () => {
                                                         }
                                                         alt={ele?._id}
                                                     />
-                                                </td>
-                                                <td>{ele?.name}</td>
-                                                <td>{ele?.price}</td>
-                                                <td>{ele?.category}</td>
-                                                <td>{ele?.brand}</td>
-                                                <td>{ele?.seller}</td>
-                                                <td className="">
-                                                    <button
-                                                        className=""
-                                                        onClick={() => {
-                                                            deleteUser(ele?._id);
-                                                        }}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
+                                                </Link>
+                                            </td>
+                                            <td className="px-4 py-2">{ele?.name}</td>
+                                            <td className="px-4 py-2">{ele?.price}</td>
+                                            <td className="px-4 py-2">{ele?.category}</td>
+                                            <td className="px-4 py-2">{ele?.brand}</td>
+                                            <td className="px-4 py-2">{ele?.seller?.name}</td>
+                                            {console.log(ele)}
+                                            <td className="px-4 py-2">
+                                                <Link to={`/product/updateproduct/${ele?._id}`} className="border-3 border-gray-400 bg-gray-200 rounded p-1 mx-1"> Edit</Link>
+                                                <button
+                                                    className="border-3 border-gray-400 bg-gray-200 rounded p-1"
+                                                    onClick={() => {
+                                                        deleteUser(ele?._id);
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
                     ) : (
-                        <NoData />
+                        <NoData text={"Products"} />
                     )}
                 </section>
             )}

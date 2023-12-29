@@ -33,16 +33,16 @@ const Profile = () => {
     return (
         <div className='flex flex-col gap-16'>
             <div className='flex flex-row gap-8 justify-center'>
-                <div className='flex flex-col'>
+                <div className='w-56 h-56'>
+                    <img src={user?.profileImage} alt="profile" className='rounded-lg w-full h-full' />
+                </div>
+                <div className='flex flex-col text-2xl text-slate-700 gap-4'>
                     <div>User name: {user?.name}</div>
                     <div>Email: {user?.email}</div>
-                    <div>Mobile: {user?.mobile}</div>
+                    <div>Mobile Number: {user?.mobile}</div>
                     <div>Address: {user?.address}</div>
-                    <div>Gender: {user?.gender}</div>
                 </div>
-                <div className='w-20 h-20'>
-                    <img src={user?.profileImage} alt="profile" />
-                </div>
+
 
             </div>
             <Link to={`/profile/updateprofile/${id}`} className='flex justify-center'>

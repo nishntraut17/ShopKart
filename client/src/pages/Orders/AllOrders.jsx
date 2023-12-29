@@ -4,11 +4,11 @@ import NoData from '../../components/noData/NoData';
 import ComponentLoading from "../../components/loading/ComponentLoading";
 import { format } from "date-fns";
 import Modal from "./Modal";
+import { Link } from 'react-router-dom';
 
 const AllOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
@@ -49,16 +49,20 @@ const AllOrders = () => {
                 'authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(review);
-        console.log(selectedOrder.product._id);
-        const { data } = await axios.put(`http://localhost:5000/api/product/comment/${selectedOrder.product._id}`, {
+        await axios.put(`http://localhost:5000/api/product/comment/${selectedOrder.product._id}`, {
             comment: review,
         }, {
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        console.log(data)
+        await axios.put(`http://localhost:5000/api/order/${selectedOrder._id}`, {
+            disableReview: true,
+        }, {
+            headers: {
+                'authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
 
 
         setRating(0);
@@ -89,25 +93,29 @@ const AllOrders = () => {
                     {orders.length && orders.map((item, i) => (
                         <tr key={i} className="mb-4">
                             <td className=''>
-                                <img
-                                    src={item?.product?.productImages[0]}
-                                    alt="order product"
-                                    className="mx-auto h-20 w-20"
-                                />
+                                <Link to={`/product/${item?.product?._id}`}>
+                                    <img
+                                        src={item?.product?.productImages[0]}
+                                        alt="order product"
+                                        className="mx-auto h-20 w-20 rounded-md"
+                                    />
+                                </Link>
                             </td>
                             <td className="text-center">{item?.product?.name}</td>
                             <td className="text-center">{item?.product?.price}</td>
                             <td className="text-center">{item?.quantity}</td>
                             <td className="text-center">{format(item?.createdAt, 'dd/MM/yyyy')}</td>
                             <td className="text-center">{item?.address}</td>
-                            <td className="text-center">
-                                <button disabled={isSubmitDisabled} onClick={() => {
+                            <td >
+                                <button disabled={item.disableReview} onClick={() => {
                                     setSelectedOrder(item);
                                     setModalOpen(true);
+                                }
 
-                                }}>
+                                }
+                                    className={`${item.disableReview ? "" : "border-gray-300 bg-slate-200 rounded-md hover:scale-105 p-2 border-2"} text-center`}>
                                     {
-                                        isSubmitDisabled ? "Product Reviewed" : "Add Rating & Review"
+                                        item.disableReview ? "Product Reviewed" : "Add Rating & Review"
                                     }
                                 </button>
                             </td>

@@ -5,9 +5,12 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { updateRole } from '../features/auth/authSlice';
+import { selectCurrentUser } from '../features/auth/authSlice';
+import { useSelector } from 'react-redux'
 
 const BecomeASeller = () => {
     const [isChecked, setIsChecked] = useState(false);
+    const user = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const handleCheckboxChange = () => {
@@ -21,7 +24,7 @@ const BecomeASeller = () => {
         }
         await toast.promise(
 
-            axios.put("http://localhost:5000/api/user/seller", {
+            axios.put(`http://localhost:5000/api/user/seller/${user.userId}`, {
                 role: 'pseudoSeller'
             }, {
                 headers: {

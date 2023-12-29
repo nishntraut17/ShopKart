@@ -32,4 +32,16 @@ const addOrder = async (req, res) => {
     }
 }
 
-module.exports = { getAllOrders, getUserOrders, addOrder };
+const disableReviewOption = async (req, res) => {
+    try {
+        console.log("yaha tak aa raha hai")
+        const order = await Order.findOne({ _id: req.params.id });
+        order.disableReview = true;
+        await order.save()
+        res.status(200).send(order);
+    } catch (error) {
+        res.send(error);
+    }
+}
+
+module.exports = { disableReviewOption, getUserOrders, addOrder };

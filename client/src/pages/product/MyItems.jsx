@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import Card from "../../components/Card/Card"
 import ComponentLoading from '../../components/loading/ComponentLoading';
 import { Slider } from '@mui/material';
+import { selectCurrentUser } from "../../features/auth/authSlice";
+import { useSelector } from "react-redux";
 import NoData from '../../components/noData/NoData';
 
-const ProductsPage = () => {
+const MyItems = () => {
+    const currentUser = useSelector(selectCurrentUser);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -75,7 +78,13 @@ const ProductsPage = () => {
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                setProducts(response.data);
+                let userData = response.data.filter((ele) => {
+                    return ele?.seller?._id === currentUser.userId;
+
+                })
+                console.log(response.data[2].seller);
+                console.log(currentUser.userId)
+                setProducts(userData);
             } catch (error) {
                 console.error('Axios error:', error);
             } finally {
@@ -92,18 +101,17 @@ const ProductsPage = () => {
     return (
         <div className="">
             <div className="mx-auto max-w-2xl px-4 sm:px-6  lg:max-w-7xl lg:px-8">
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900 py-4">All Products</h2>
                 <div className='flex flex-row items-center gap-8 justify-center'>
                     <div className="rounded-xl w-96">
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="custom-input-outline focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-full"
+                            className="focus:outline-none w-full py-2"
                             placeholder={`Search Products...`}
                         />
                     </div>
-                    <select id="categoryFilter" value={selectedCategory} onChange={handleCategoryChange} className='h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-56'>
+                    <select id="categoryFilter" value={selectedCategory} onChange={handleCategoryChange} className='h-10 '>
                         <option value="">All Categories</option>
                         {categoryOptions.map((category, index) => (
                             <option key={index} value={category}>
@@ -112,20 +120,16 @@ const ProductsPage = () => {
 
                         ))}
                     </select>
-                    <div className='flex flex-row p-1 gap-4'>
-                        <p className='flex flex-row '>Price Range:</p>
-                        <div className='w-40'>
-                            <Slider
-                                aria-label='Price'
-                                value={value}
-                                valueLabelDisplay='auto'
-                                min={0}
-                                max={150000}
-                                onChange={handlePrice}
-                            />
-                        </div>
-                    </div>
-                    <select id='sortingFilter' value={selectedSorting} onChange={handleSortingChange} className='h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto'>
+                    <p className='flex flex-row'>Price Range:</p>
+                    <Slider
+                        aria-label='Price'
+                        value={value}
+                        valueLabelDisplay='auto'
+                        min={0}
+                        max={150000}
+                        onChange={handlePrice}
+                    />
+                    <select id='sortingFilter' value={selectedSorting} onChange={handleSortingChange} className='h-10 '>
                         <option value=''>Default</option>
                         {sortingFilters.map((sortingFilter, index) => (
                             <option key={index} value={sortingFilter}>
@@ -134,7 +138,7 @@ const ProductsPage = () => {
                         ))}
                     </select>
                 </div>
-
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900">All Products</h2>
 
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                     {filteredData.length ? filteredData.map((product, id) => (
@@ -148,4 +152,4 @@ const ProductsPage = () => {
     )
 }
 
-export default ProductsPage
+export default MyItems

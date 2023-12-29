@@ -15,7 +15,7 @@ import UpdateProfile from './pages/Users/UpdateProfile';
 import BecomeASeller from './pages/BecomeASeller';
 import Error from './pages/Error';
 import UpdateProduct from './pages/product/UpdateProduct';
-import ItemsSold from './pages/product/ItemsSold';
+import MyItems from './pages/product/MyItems';
 import { Admin, Seller, Public, Protected } from "./middleware/route";
 import AdminApplications from './pages/Admin/AdminApplications';
 import AllUsers from './pages/Admin/AllUsers';
@@ -46,7 +46,7 @@ function App() {
           <Route path="/" element={<RootLayout />}>
             <Route path='/' element={<Public><Home /></Public>} />
             <Route path='/product/addproduct' element={<Seller><AddProduct /></Seller>} />
-            <Route path='/product/updateproduct' element={<Seller><UpdateProduct /></Seller>} />
+            <Route path='/product/updateproduct/:id' element={<Seller><UpdateProduct /></Seller>} />
             <Route path='/product/:id' element={<Public><SingleProduct /></Public>} />
             <Route path="/orders/checkout" element={<Protected><Checkout /></Protected>} />
             <Route path="/product" element={<Public><ProductsPage /></Public>} />
@@ -55,7 +55,7 @@ function App() {
             <Route path="/profile/:id" element={<Protected><Profile /></Protected>} />
             <Route path='/profile/updateprofile/:id' element={<Protected><UpdateProfile /></Protected>} />
             <Route path='/seller' element={<Protected><BecomeASeller /></Protected>} />
-            <Route path='/product/items-sold' element={<Seller><ItemsSold /></Seller>} />
+            <Route path='/product/my-items' element={<Seller><MyItems /></Seller>} />
             <Route path='/*' element={<Public><Error /></Public>} />
           </Route>
           <Route

@@ -1,13 +1,39 @@
 // CheckoutPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
+import ComponentLoading from "../../components/loading/ComponentLoading";
+import { selectCurrentUser } from '../../features/auth/authSlice';
 
 const CheckoutPage = () => {
     const [address, setAddress] = useState("");
     const cartItems = useSelector((state) => state.cart.items);
+    const [user] = useState(useSelector(selectCurrentUser));
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true)
+        const getUser = async () => {
+            try {
+                const { data } = await axios.get(`http://localhost:5000/api/user/${user.userId}`, {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`
+                    }
+                })
+                console.log(data);
+                setAddress(data.address);
+            } catch (error) {
+                console.log(error);
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+        getUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
@@ -20,8 +46,6 @@ const CheckoutPage = () => {
         const { value } = e.target;
         return setAddress(value);
     }
-
-
 
     //payment integration
     const makePayment = async () => {
@@ -64,14 +88,17 @@ const CheckoutPage = () => {
 
     }
 
+    if (loading) {
+        return <ComponentLoading />
+    }
 
     return (
         <div className="container mx-auto px-16 flex flex-col gap-6 lg:px-32 lg:scale-110">
             <h2 className="text-2xl font-bold mb-4">Checkout</h2>
-            <div className="flex flex-col gap-4 bg-slate-50 p-4">
+            <div className="flex flex-col gap-4 p-4">
                 {cartItems.map((item) => (
                     <div className=' w-52'>
-                        <div className='flex flex-row border border-slate-200 hover:opacity-70 rounded-lg p-2'>
+                        <div className='flex flex-row border border-gray-100 hover:opacity-70 rounded-lg p-2'>
                             <div className='flex flex-col'>
                                 <h1>{item.name}</h1>
                                 <h1>₹ {item.price}</h1>
@@ -98,7 +125,7 @@ const CheckoutPage = () => {
             </div>
 
             <div className="mt-8 flex flex-row gap-2 items-end ">
-                <Link to="/product" className='p-2 border border-slate-200 hover:border-slate-300 rounded-lg'>All Products</Link>
+                <Link to="/product" className='p-2 border border-slate-200 hover:border-slate-300 rounded-lg'>Continue Shopping</Link>
                 <button
                     type="submit"
                     className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"

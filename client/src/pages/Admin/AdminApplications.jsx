@@ -11,13 +11,15 @@ const AdminApplications = () => {
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('http://localhost:5000/api/user/pseudoseller', {
+            const { data } = await axios.get('http://localhost:5000/api/user', {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
             })
-
-            setApplications(data);
+            const filteredData = data.filter((ele) => {
+                return ele.role === 'pseudoSeller'
+            })
+            setApplications(filteredData);
             setLoading(false)
         } catch (error) { console.log(error) }
     };
@@ -92,19 +94,19 @@ const AdminApplications = () => {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>S.No</th>
-                                        <th>Pic</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Action</th>
+                                        <th className="px-4 py-2">S.No</th>
+                                        <th className="px-4 py-2">Pic</th>
+                                        <th className="px-4 py-2">Name</th>
+                                        <th className="px-4 py-2">Email</th>
+                                        <th className="px-4 py-2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {applications?.map((ele, i) => {
                                         return (
                                             <tr key={ele?._id}>
-                                                <td>{i + 1}</td>
-                                                <td>
+                                                <td className="px-4 py-2">{i + 1}</td>
+                                                <td className="px-4 py-2">
                                                     <img
                                                         className="h-20 w-20"
                                                         src={
@@ -114,11 +116,11 @@ const AdminApplications = () => {
                                                         alt={ele?._id}
                                                     />
                                                 </td>
-                                                <td>{ele?.name}</td>
-                                                <td>{ele?.email}</td>
-                                                <td className="">
+                                                <td className="px-4 py-2">{ele?.name}</td>
+                                                <td className="px-4 py-2">{ele?.email}</td>
+                                                <td className="px-4 py-2">
                                                     <button
-                                                        className=""
+                                                        className="border-1 border-gray-300 m-1"
                                                         onClick={() => {
                                                             acceptUser(ele?._id);
                                                         }}
@@ -126,7 +128,7 @@ const AdminApplications = () => {
                                                         Accept
                                                     </button>
                                                     <button
-                                                        className=""
+                                                        className="border-1 border-gray-300 m-1"
                                                         onClick={() => {
                                                             deleteUser(ele?._id);
                                                         }}
@@ -141,7 +143,7 @@ const AdminApplications = () => {
                             </table>
                         </div>
                     ) : (
-                        <NoData />
+                        <NoData text={'User'} />
                     )}
                 </section>
             )}

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-// import { useAddProductMutation } from "../features/products/productApiSlice";
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AddProduct() {
-    // const [addProduct] = useAddProductMutation();
     const [imagePreviews, setImagePreviews] = useState([]);
     const navigate = useNavigate();
     const [files, setFiles] = useState([]);
@@ -86,6 +84,10 @@ function AddProduct() {
                     brand,
                     category,
                     productImages: files,
+                }, {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`
+                    }
                 }),
                 {
                     loading: "loading...",
@@ -99,13 +101,13 @@ function AddProduct() {
     };
 
     return (
-        <section className="">
-            <div className="">
-                <h2 className="">Upload</h2>
-                <form
-                    onSubmit={formSubmit}
-                    className="flex flex-col p-16 lg:w-80 gap-4"
-                >
+        <div className="">
+            <h2 className="px-10 text-bold text-2xl">Add New Product</h2>
+            <form
+                onSubmit={formSubmit}
+                className="flex flex-col p-10 gap-4 justify-center"
+            >
+                <div className="flex flex-col lg:flex-row gap-4">
                     <label>Enter Product Name:</label>
                     <input
                         type="text"
@@ -113,6 +115,7 @@ function AddProduct() {
                         placeholder="Enter product name"
                         value={formDetails.name}
                         onChange={inputChange}
+                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
                     <label>Enter Price:</label>
                     <input
@@ -122,6 +125,7 @@ function AddProduct() {
                         placeholder="Enter price"
                         value={formDetails.price}
                         onChange={inputChange}
+                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
                     <label>Enter Brand:</label>
                     <input
@@ -131,6 +135,7 @@ function AddProduct() {
                         placeholder="Enter brand"
                         value={formDetails.brand}
                         onChange={inputChange}
+                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
                     <label>Enter Category:</label>
                     <input
@@ -140,24 +145,33 @@ function AddProduct() {
                         placeholder="Enter Category"
                         value={formDetails.category}
                         onChange={inputChange}
+                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
+                </div>
+                <div className="flex flex-col lg:flex-row gap-4 w-96">
+
                     <label>Enter Description:</label>
-                    <input
+                    <textarea
                         type="text"
                         name="description"
 
                         placeholder="Enter description"
                         value={formDetails.description}
                         onChange={inputChange}
+                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
-                    <label>Upload images:</label>
+                </div>
+                <div className="flex">
                     <input
                         type="file"
                         onChange={(e) => onUpload(e.target.files)}
                         name="profile-pic"
                         id="profile-pic"
-
+                        className="hidden"
                     />
+                    <label for="profile-pic" className="cursor-pointer bg-slate-200 border-2 rounded-lg p-2 hover:border-3 hover:bg-slate-300 h-10">
+                        Upload Product Images
+                    </label>
                     {imagePreviews.map((preview, index) => (
                         <div key={index}>
                             <img
@@ -167,15 +181,17 @@ function AddProduct() {
                             />
                         </div>
                     ))}
-                    <button
-                        type="submit"
-                        className="bg-slate-200 border-2 rounded-lg p-2"
-                    >
-                        Upload
-                    </button>
-                </form>
-            </div>
-        </section>
+                </div>
+
+
+                <button
+                    type="submit"
+                    className="bg-slate-200 border-2 rounded-lg p-2 w-24 hover:border-3 hover:bg-slate-300"
+                >
+                    Upload
+                </button>
+            </form>
+        </div>
     );
 }
 

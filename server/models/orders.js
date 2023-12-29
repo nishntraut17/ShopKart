@@ -16,6 +16,10 @@ const orderSchema = mongoose.Schema({
     },
     address: {
         type: String,
+    },
+    disableReview: {
+        type: Boolean,
+        default: false,
     }
 }, {
     timestamps: true,

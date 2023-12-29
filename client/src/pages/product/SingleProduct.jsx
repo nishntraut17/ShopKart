@@ -1,21 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { addToCart, setOpen } from '../../features/cart/cartSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Rating } from '@mui/material';
-import NoData from "../../components/noData/NoData";
+import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
 import ComponentLoading from "../../components/loading/ComponentLoading";
 import SameCategory from '../../components/Product/SameCategory';
 import { Avatar as MuiAvatar } from '@mui/material';
 import ProductFeature from '../../static/productFeature.png';
 import Brand from "../../static/brand.png";
 import TopBrand from '../../static/topbrand.png';
+import { MoreVert } from "@mui/icons-material";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 const SingleProduct = () => {
+    const navigate = useNavigate();
+
+    const user = useSelector(selectCurrentUser);
     const [activeImgIndex, setActiveImgIndex] = useState(0);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
     const { id } = useParams();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
@@ -25,6 +31,43 @@ const SingleProduct = () => {
         (sum, item) => sum + item.rating, 0
     ) : 0;
     const averageRating = sumOfRatings === 0 ? 0 : sumOfRatings / product?.ratings.length;
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDelete = async (req, res) => {
+        const confirm = window.confirm("Are you sure you want to Delete?");
+        if (confirm) {
+            await toast.promise(
+                axios.delete(
+                    `http://localhost:5000/api/product/${id}`,
+                    {
+                        headers: {
+                            'authorization': `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                ),
+                {
+                    success: "Product Deleted Successfully",
+                    error: "Unable to Delete",
+                    loading: "please wait...",
+                }
+            );
+        }
+    }
+
+    const handleMenuDelete = () => {
+        if (window.confirm("Are you sure you want to delete?")) {
+            handleDelete();
+            navigate("/product");
+        }
+        setAnchorEl(null);
+    };
 
 
     const handleAddToCart = () => {
@@ -40,6 +83,7 @@ const SingleProduct = () => {
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                console.log(response.data);
                 setProduct(response.data);
             } catch (error) {
                 console.error('Axios error:', error);
@@ -75,15 +119,47 @@ const SingleProduct = () => {
                     <img src={product.productImages[activeImgIndex]} alt={product.name} className='max-w-lg border-2 rounded' />
                 </div>
                 <div className='flex flex-col gap-5 '>
-                    <div className='flex flex-row items-center'>
+                    <div className='flex flex-row items-center justify-between'>
                         <p className="flex items-center text-lg font-semibold">{product.name}</p>
-                        <Rating
-                            value={averageRating}
-                            size={"small"}
-                            className='p-3'
-                            readOnly
-                        />
-                        <p className='text-gray-500'>{product.ratings.length} ratings</p>
+                        <div className='flex flex-row gap-2'>
+                            <Rating
+                                value={averageRating}
+                                size={"small"}
+                                className='p-3'
+                                readOnly
+                            />
+                            <p className='text-gray-500 flex justify-center items-center'>{product.ratings.length} ratings</p>
+                        </div>
+
+                        {product?.seller?._id === user?.userId && (
+                            <>
+                                <IconButton
+                                    aria-label="more"
+                                    id="long-button"
+                                    aria-controls={open ? "long-menu" : undefined}
+                                    aria-expanded={open ? "true" : undefined}
+                                    aria-haspopup="true"
+                                    size="small"
+                                    onClick={handleMenu}
+                                >
+                                    <MoreVert />
+                                </IconButton>
+                                <Menu
+                                    id="long-menu"
+                                    MenuListProps={{
+                                        "aria-labelledby": "long-button",
+                                    }}
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleMenuClose}
+                                >
+                                    <MenuItem>
+                                        <Link to={`/product/updateproduct/${id}`}>Edit</Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleMenuDelete}>Delete</MenuItem>
+                                </Menu>
+                            </>
+                        )}
                     </div>
 
                     <h1 className="">Category: {product.category}</h1>

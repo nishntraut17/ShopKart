@@ -24,6 +24,10 @@
   color: white;
 }
 
+.custom-input-outline:focus {
+  outline: 2px solid #cad6df; /* Change the color to your desired outline color */
+}
+
 .App-link {
   color: #61dafb;
 }
