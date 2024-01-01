@@ -38,8 +38,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        success_url: "https://shopkart-ecommerce.onrender.com/orders/success",
-        cancel_url: "https://shopkart-ecommerce.onrender.com",
+        success_url: "https://shopkart-ecommerce-app.netlify.app",
+        cancel_url: "https://shopkart-ecommerce-app.netlify.app",
     })
     console.log(session);
 
