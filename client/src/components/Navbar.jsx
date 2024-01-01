@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import Avatar from "../Avatar/Avatar";
+import Avatar from "./Avatar";
 import { Link, NavLink } from "react-router-dom";
 import { FiLogIn, FiMenu } from "react-icons/fi";
 import CartBox from "./CartBox";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser } from "../../features/auth/authSlice";
-import { setOpen, itemCount } from "../../features/cart/cartSlice";
+import { selectCurrentUser } from "../redux/reducers/authSlice";
+import { setOpen, itemCount } from "../redux/reducers/cartSlice";
 import { ShoppingCart } from "@mui/icons-material";
 
 import Menu from "./Menu";
-import LogoWithNameTransparent from "../../static/LogoWithNameTransparent.png";
+import LogoWithNameTransparent from "../assets/LogoWithNameTransparent.png";
 
 const Header = () => {
     const [isCollapsed, setIsCollapsed] = useState(true);
@@ -83,7 +83,7 @@ const Header = () => {
                     <div className="relative">
                         <p className="absolute left-5 text-slate-400 hover:cursor-pointer">{cnt}</p>
                         <div className="flex flex-row gap-2 items-center">
-                            < ShoppingCart onClick={() => dispatch(setOpen(true))} className="hover:cursor-pointer" />
+                            < ShoppingCart onClick={() => dispatch(setOpen(true))} className="hover:cursor-pointer text-gray-600" />
                             <Avatar />
                         </div>
                     </div>

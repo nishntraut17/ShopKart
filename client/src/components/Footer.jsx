@@ -6,7 +6,7 @@ import {
 } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import LogoWithNameTransparent from "../../static/LogoWithNameTransparent.png";
+import LogoWithNameTransparent from "../assets/LogoWithNameTransparent.png";
 
 const Footer = () => {
     return (
@@ -17,7 +17,7 @@ const Footer = () => {
                 <div className="basis-1/2 flex flex-col gap-6 items-center md:items-start text-center md:text-start">
                     <img src={LogoWithNameTransparent} alt="logo" className="h-12 w-auto" />
                     <p>
-                        Empower Your Lifestyle with Cutting-Edge Technology! Explore a world of possibilities with our curated collection of Mobiles, Televisions, Laptops, Desktops, Tablets, Headphones, and Smart Watches. Elevate your everyday with innovation at your fingertips. Shop now and redefine your digital experience with Shopkart.
+                        Empower Your Lifestyle with Cutting-Edge Technology! Explore a world of possibilities with our curated collection of Mobiles, Laptops, Desktops, Tablets, Headphones, and Smart Watches. Elevate your everyday with innovation at your fingertips. Shop now and redefine your digital experience with Shopkart.
                     </p>
                 </div>
                 {/* Footer top right */}
@@ -29,7 +29,7 @@ const Footer = () => {
                             <Link>Mobile</Link>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
-                            <Link to='/blog'>Televisions</Link>
+                            <Link to='/blog'>Tablets</Link>
                         </motion.li>
                         <motion.li whileHover={{ x: 5 }}>
                             <Link to='recipe'>Headphones</Link>

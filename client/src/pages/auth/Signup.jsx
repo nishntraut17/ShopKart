@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import OnlyLogoTransparent from '../../static/OnlyLogoTransparent.png';
-import ComponentLoading from '../../components/loading/ComponentLoading';
+import OnlyLogoTransparent from '../../assets/OnlyLogoTransparent.png';
+import PageLoading from '../../components/PageLoading';
 
 export default function Signup() {
     const navigate = useNavigate();
-    // const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [formDetails, setFormDetails] = useState({
@@ -15,25 +14,6 @@ export default function Signup() {
         email: "",
         password: "",
     });
-
-    // const onUpload = async (element) => {
-    //     setLoading(true);
-    //     if (element.type === "image/jpeg" || element.type === "image/png") {
-    //         const data = new FormData();
-    //         data.append("file", element);
-    //         data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-    //         data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
-    //         fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
-    //             method: "POST",
-    //             body: data,
-    //         })
-    //             .then((res) => res.json())
-    //             .then((data) => setFile(data.url.toString()));
-    //         setLoading(false);
-    //     } else {
-    //         setLoading(false);
-    //     }
-    // };
 
     const inputChange = (e) => {
         const { name, value } = e.target;
@@ -45,8 +25,7 @@ export default function Signup() {
     const formSubmit = async (e) => {
         try {
             e.preventDefault();
-            if (loading) return;
-            // if (file === "") return;
+            setLoading(true);
 
             const { name, email, password } = formDetails;
             if (!email || !password || !name) {
@@ -65,13 +44,16 @@ export default function Signup() {
                     loading: "Signing up user...",
                 }
             );
+
             return navigate("/auth/login");
         } catch (error) {
             console.log('Error', error);
+        } finally {
+            setLoading(false);
         }
     }
     if (loading) {
-        <ComponentLoading />
+        <PageLoading />
     }
     return (
         <>
@@ -91,16 +73,7 @@ export default function Signup() {
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form className="space-y-6" onSubmit={formSubmit}>
                         <div>
-                            {/* <label className="block text-sm font-medium leading-6 text-gray-900">
-                                Profile Pic
-                            </label>
-                            <input
-                                type="file"
-                                onChange={(e) => onUpload(e.target.files[0])}
-                                name="profile-pic"
-                                id="profile-pic"
 
-                            /> */}
                             <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Full Name
                             </label>

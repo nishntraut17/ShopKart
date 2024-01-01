@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function SameCategory({ category, prod }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 6,
+        slidesToScroll: 1
+    };
     useEffect(() => {
         async function fetchData() {
             try {
@@ -36,7 +46,7 @@ export default function SameCategory({ category, prod }) {
             <div className=" bg-[#f4f4f4] border-r-2 border-gray-200 rounded-xl my-16 flex gap-4 flex-col p-8 mx-2">
                 <h2 className="text-2xl font-bold text-gray-700 ">Similar Products ...</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 h-auto">
+                <Slider {...settings}>
                     {products.map((item, i) => (
                         <Link to={`/product/${item._id}`}>
                             <div key={i} className="bg-white rounded-lg border-2 flex flex-col items-center justify-center gap-1 p-1 hover:scale-105">
@@ -54,7 +64,7 @@ export default function SameCategory({ category, prod }) {
                             </div>
                         </Link>
                     ))}
-                </div>
+                </Slider>
             </div>
         </div>
     )

@@ -3,7 +3,7 @@ import React from 'react';
 const Card = ({ name, image, price }) => {
     return (
 
-        <div className="group relative hover:rounded-md hover:scale-105 hover:z-10 hover:shadow">
+        <div className="group relative hover:rounded-md hover:scale-105 hover:z-30 hover:shadow">
             <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64 ">
                 <img
                     src={image}

@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "lottie-react";
-import Animation from "../../static/Loading.json";
+import Animation from "../assets/Loading.json";
 
 const PageLoading = () => {
   return (
@@ -8,7 +8,7 @@ const PageLoading = () => {
       <Lottie
         animationData={Animation}
         loop={true}
-        className="w-40 h-40"
+        className="w-32 h-32"
       />
     </div>
   );

@@ -12,7 +12,7 @@ const getAllOrders = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ user: req.user }).populate("product", ["_id", "name", "price", "productImages"]);
+        const orders = await Order.find({ user: req.user }).populate("product", ["_id", "name", "price", "productImages"]).sort({ createdAt: -1 });
         return res.send(orders);
     } catch (error) {
         res.status(500).send(error);
@@ -34,7 +34,6 @@ const addOrder = async (req, res) => {
 
 const disableReviewOption = async (req, res) => {
     try {
-        console.log("yaha tak aa raha hai")
         const order = await Order.findOne({ _id: req.params.id });
         order.disableReview = true;
         await order.save()
@@ -44,4 +43,14 @@ const disableReviewOption = async (req, res) => {
     }
 }
 
-module.exports = { disableReviewOption, getUserOrders, addOrder };
+const deleteOrders = async (req, res) => {
+    try {
+        await Order.findAndDelete({ product: req.params.id });
+        res.status(204).send("Deleted Successfully");
+    } catch (error) {
+        console.log(error);
+        res.send(error);
+    }
+}
+
+module.exports = { disableReviewOption, getUserOrders, addOrder, deleteOrders };

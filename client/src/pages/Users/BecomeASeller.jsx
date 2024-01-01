@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Banner from '../static/BecomeSellerBanner.png';
+import Banner from '../../assets/BecomeSellerBanner.png';
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { updateRole } from '../features/auth/authSlice';
-import { selectCurrentUser } from '../features/auth/authSlice';
+import { updateRole } from '../../redux/reducers/authSlice';
+import { selectCurrentUser } from '../../redux/reducers/authSlice';
 import { useSelector } from 'react-redux'
 
 const BecomeASeller = () => {

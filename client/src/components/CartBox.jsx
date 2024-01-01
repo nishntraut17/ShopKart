@@ -1,8 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useDispatch, useSelector } from "react-redux";
-import { setOpen, selectCartItems, selectCartOpen, addToCart, removeFromCart, removeSingleItem, emptyCart } from '../../features/cart/cartSlice';
+import { setOpen, selectCartOpen, addToCart, removeFromCart, removeSingleItem, emptyCart } from '../redux/reducers/cartSlice';
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom';
 import CartBoxItem from './CartBoxItem';

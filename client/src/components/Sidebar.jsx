@@ -3,15 +3,11 @@ import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BiHomeAlt2 } from "react-icons/bi";
 import { HiOutlineUsers, HiOutlineLogout } from "react-icons/hi";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../features/auth/authSlice";
-import { Avatar as MuiAvatar } from "@mui/material";
 import { FaShopify } from "react-icons/fa";
 import { HiDocumentReport } from "react-icons/hi";
 import { useNavigate } from 'react-router-dom'
 
-const SideBar = ({ isCollapsed }) => {
-  const user = useSelector(selectCurrentUser);
+const SideBar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");

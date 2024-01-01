@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from "react-hot-toast";
-import ComponentLoading from "../../components/loading/ComponentLoading";
-import { selectCurrentUser } from '../../features/auth/authSlice';
+import ComponentLoading from "../../components/ComponentLoading";
+import { selectCurrentUser } from '../../redux/reducers/authSlice';
 
 const CheckoutPage = () => {
     const [address, setAddress] = useState("");

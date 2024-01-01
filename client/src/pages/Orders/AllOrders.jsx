@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import NoData from '../../components/noData/NoData';
-import ComponentLoading from "../../components/loading/ComponentLoading";
+import NoData from '../../components/NoData';
+import ComponentLoading from "../../components/ComponentLoading";
 import { format } from "date-fns";
 import Modal from "./Modal";
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
 const AllOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -31,7 +32,7 @@ const AllOrders = () => {
             }
         }
         fetchData();
-    }, []);
+    }, [setSelectedOrder, orders]);
     const handleRatingChange = (val) => {
         setRating(val);
     };
@@ -42,27 +43,33 @@ const AllOrders = () => {
 
     const handleRatingReviewSubmit = async () => {
 
-        await axios.put(`http://localhost:5000/api/product/rate/${selectedOrder.product._id}`, {
-            rating,
-        }, {
-            headers: {
-                'authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        await axios.put(`http://localhost:5000/api/product/comment/${selectedOrder.product._id}`, {
-            comment: review,
-        }, {
-            headers: {
-                'authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-        await axios.put(`http://localhost:5000/api/order/${selectedOrder._id}`, {
-            disableReview: true,
-        }, {
-            headers: {
-                'authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
+        await toast.promise(
+            axios.put(`http://localhost:5000/api/product/rate/${selectedOrder.product._id}`, {
+                rating,
+            }, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }),
+            axios.put(`http://localhost:5000/api/product/comment/${selectedOrder.product._id}`, {
+                comment: review,
+            }, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }),
+            axios.put(`http://localhost:5000/api/order/${selectedOrder._id}`, {
+                disableReview: true,
+            }, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }), {
+            success: "Review Added Successfully",
+            error: "Unable to add review",
+            loading: "Adding review",
+        }
+        )
 
 
         setRating(0);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import ComponentLoading from '../../components/loading/ComponentLoading';
-import NoData from "../../components/noData/NoData";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import ComponentLoading from '../../components/ComponentLoading';
+import NoData from "../../components/NoData";
+import { selectCurrentUser } from "../../redux/reducers/authSlice";
 import { useSelector } from 'react-redux'
 import { Link } from "react-router-dom";
 

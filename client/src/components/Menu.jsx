@@ -4,11 +4,10 @@ import React from "react";
 import { FiLogIn, FiMenu } from "react-icons/fi";
 import { Link, NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
-import { setUserInfo } from "../../features/auth/authSlice";
-import { setOpen } from "../../features/cart/cartSlice";
-import { jwtDecode } from "jwt-decode";
+import { setUserInfo } from "../redux/reducers/authSlice";
+import { setOpen } from "../redux/reducers/cartSlice";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../redux/reducers/authSlice";
 
 const Menu = ({ isCollapsed, setIsCollapsed }) => {
     const dispatch = useDispatch()

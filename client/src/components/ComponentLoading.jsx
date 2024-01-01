@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "lottie-react";
-import componentLoading from "../../static/componentLoading.json";
+import componentLoading from "../assets/componentLoading.json";
 
 const ComponentLoading = () => {
   return (

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Image } from "@mui/icons-material";
 
 function AddProduct() {
     const [imagePreviews, setImagePreviews] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const navigate = useNavigate();
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -12,9 +14,20 @@ function AddProduct() {
         name: "",
         price: "",
         brand: "",
-        category: "",
         description: ""
     });
+
+    const handleCategoryChange = (event) => {
+        setSelectedCategory(event.target.value);
+    }
+
+    const categoryOptions = [
+        'Mobile',
+        'Laptop',
+        'Tablets',
+        'Headphones',
+        'Smart Watches',
+    ];
 
     const handleImageChange = (elements) => {
         const newPreviews = Array.from(elements).map(element => {
@@ -74,7 +87,7 @@ function AddProduct() {
             if (loading) return;
             if (files.length === 0) return;
 
-            const { name, price, description, brand, category } = formDetails;
+            const { name, price, description, brand } = formDetails;
             console.log(formDetails);
             const response = await toast.promise(
                 axios.post('http://localhost:5000/api/product', {
@@ -82,7 +95,7 @@ function AddProduct() {
                     price,
                     description,
                     brand,
-                    category,
+                    category: selectedCategory,
                     productImages: files,
                 }, {
                     headers: {
@@ -137,16 +150,15 @@ function AddProduct() {
                         onChange={inputChange}
                         className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
                     />
-                    <label>Enter Category:</label>
-                    <input
-                        type="text"
-                        name="category"
-
-                        placeholder="Enter Category"
-                        value={formDetails.category}
-                        onChange={inputChange}
-                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
-                    />
+                    <label>Select Category:</label>
+                    <select id="categoryFilter" value={formDetails.category} onChange={handleCategoryChange} className='h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-56'>
+                        <option value={"Electronic"}>Electronic</option>
+                        {categoryOptions.map((category, index) => (
+                            <option key={index} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex flex-col lg:flex-row gap-4 w-96">
 
@@ -154,11 +166,10 @@ function AddProduct() {
                     <textarea
                         type="text"
                         name="description"
-
                         placeholder="Enter description"
                         value={formDetails.description}
                         onChange={inputChange}
-                        className="h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto"
+                        className="h-72 w-3/4 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2"
                     />
                 </div>
                 <div className="flex">
@@ -169,9 +180,7 @@ function AddProduct() {
                         id="profile-pic"
                         className="hidden"
                     />
-                    <label for="profile-pic" className="cursor-pointer bg-slate-200 border-2 rounded-lg p-2 hover:border-3 hover:bg-slate-300 h-10">
-                        Upload Product Images
-                    </label>
+                    <label htmlFor="profile-pic" className='block font-medium mb-2 hover:cursor-pointer' for='profile-pic'>Upload Image: <Image /></label>
                     {imagePreviews.map((preview, index) => (
                         <div key={index}>
                             <img

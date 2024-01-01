@@ -2,7 +2,6 @@
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
 import { Rating } from '@mui/material';
-import { useEffect } from 'react';
 
 const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, handleReviewChange, selectedOrder }) => {
     if (!selectedOrder) {
@@ -19,10 +18,10 @@ const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, 
                 <div className="absolute inset-0 overflow-hidden">
                     <Transition.Child
                         as={Fragment}
-                        enter="transform transition ease-in-out duration-500 sm:duration-700"
+                        enter="transform transition ease-in-out duration-200 sm:duration-200"
                         enterFrom="opacity-0"
                         enterTo="opacity-100"
-                        leave="transform transition ease-in-out duration-500 sm:duration-700"
+                        leave="transform transition ease-in-out duration-200 sm:duration-200"
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
@@ -31,10 +30,10 @@ const Modal = ({ isOpen, onClose, onSubmit, rating, review, handleRatingChange, 
 
                     <Transition.Child
                         as={Fragment}
-                        enter="transform transition ease-in-out duration-500 sm:duration-700"
+                        enter="transform transition ease-in-out duration-200 sm:duration-200"
                         enterFrom="translate-y-4 sm:translate-y-0 sm:scale-95"
                         enterTo="translate-y-0 sm:scale-100"
-                        leave="transform transition ease-in-out duration-500 sm:duration-700"
+                        leave="transform transition ease-in-out duration-200 sm:duration-200"
                         leaveFrom="translate-y-0 sm:scale-100"
                         leaveTo="translate-y-4 sm:translate-y-0 sm:scale-95"
                     >

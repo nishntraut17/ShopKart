@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SuccessImg from "../../static/success.gif"
+import SuccessImg from "../../assets/success.gif"
 
 const Success = () => {
     return (

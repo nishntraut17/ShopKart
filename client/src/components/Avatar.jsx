@@ -21,7 +21,7 @@ import { IoAdd } from "react-icons/io5";
 import { FaShopify } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { selectCurrentUser, setUserInfo } from "../../features/auth/authSlice";
+import { selectCurrentUser, setUserInfo } from "../redux/reducers/authSlice";
 import { useSelector } from "react-redux";
 
 const Avatar = () => {

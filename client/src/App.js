@@ -2,30 +2,33 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import React, { lazy, Suspense } from 'react';
 import './App.css';
-import Home from './pages/Home/Home';
-import SingleProduct from './pages/product/SingleProduct';
-import Checkout from './pages/Orders/Checkout';
-import AllOrders from './pages/Orders/AllOrders';
-import ProductsPage from './pages/product/ProductsPage';
-import RootLayout from './pages/RootLayout';
-import Success from './pages/Orders/Success';
-import PageLoading from "./components/loading/PageLoading";
-import Profile from './pages/Users/Profile';
-import UpdateProfile from './pages/Users/UpdateProfile';
-import BecomeASeller from './pages/BecomeASeller';
-import Error from './pages/Error';
-import UpdateProduct from './pages/product/UpdateProduct';
-import MyItems from './pages/product/MyItems';
-import { Admin, Seller, Public, Protected } from "./middleware/route";
-import AdminApplications from './pages/Admin/AdminApplications';
-import AllUsers from './pages/Admin/AllUsers';
-import AllProducts from './pages/Admin/AllProducts';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from './features/auth/authSlice';
+import { setUserInfo } from './redux/reducers/authSlice';
 import { jwtDecode } from 'jwt-decode';
-import DashboardLayout from './pages/Admin/DashboardLayout';
+import { Admin, Seller, Public, Protected } from './middleware/route';
 
-const AddProduct = lazy(() => import("./components/Product/AddProduct"));
+const Home = lazy(() => import('./pages/Home/Home'));
+const SingleProduct = lazy(() => import('./pages/product/SingleProduct'));
+const Checkout = lazy(() => import('./pages/Orders/Checkout'));
+const AllOrders = lazy(() => import('./pages/Orders/AllOrders'));
+const ProductsPage = lazy(() => import('./pages/product/ProductsPage'));
+const RootLayout = lazy(() => import('./pages/RootLayout'));
+const Success = lazy(() => import('./pages/Orders/Success'));
+const PageLoading = lazy(() => import('./components/PageLoading'));
+const Profile = lazy(() => import('./pages/Users/Profile'));
+const UpdateProfile = lazy(() => import('./pages/Users/UpdateProfile'));
+const BecomeASeller = lazy(() => import('./pages/Users/BecomeASeller'));
+const Error = lazy(() => import('./pages/Error'));  // Changed to ErrorPage to avoid conflicts with the built-in Error object
+const UpdateProduct = lazy(() => import('./pages/product/UpdateProduct'));
+const MyItems = lazy(() => import('./pages/product/MyItems'));
+
+const AdminApplications = lazy(() => import('./pages/Admin/AdminApplications'));
+const AllUsers = lazy(() => import('./pages/Admin/AllUsers'));
+const AllProducts = lazy(() => import('./pages/Admin/AllProducts'));
+const DashboardLayout = lazy(() => import('./pages/Admin/DashboardLayout'));
+
+
+const AddProduct = lazy(() => import("./pages/product/AddProduct"));
 const Login = lazy(() => import('./pages/Auth/Login'));
 const Signup = lazy(() => import('./pages/Auth/Signup'));
 

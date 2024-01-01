@@ -1,15 +1,17 @@
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom';
-import ComponentLoading from "../../components/loading/ComponentLoading";
+import ComponentLoading from "../../components/ComponentLoading";
+import { Image } from '@mui/icons-material';
+import { setUserInfo, selectCurrentUser } from '../../redux/reducers/authSlice';
 
 const UpdateProfile = () => {
     const { id } = useParams();
-    // const [user, setUser] = useState(null);
     const dispatch = useDispatch();
+    const user = useSelector(selectCurrentUser);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [file, setFile] = useState("");
@@ -24,9 +26,15 @@ const UpdateProfile = () => {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
                 })
-                setInfo(data);
+                setInfo({
+                    name: data.name,
+                    email: data.email,
+                    mobile: data.mobile,
+                    address: data.address,
+                    password: "",
+                });
                 setFile(data.profileImage);
-                console.log(data);
+
             } catch (error) {
                 console.log(error);
             }
@@ -84,6 +92,7 @@ const UpdateProfile = () => {
                     loading: "updating user details...",
                 }
             );
+            dispatch(setUserInfo({ userId: id, name: info.name, email: info.email, profileImage: file, role: user.role }));
             return navigate(`/profile/${id}`);
         } catch (error) {
             console.log('Error', error);
@@ -100,34 +109,40 @@ const UpdateProfile = () => {
 
     return (
         <div className='text-gray-700'>
-            <h1 className='text-2xl text-bold flex justify-center'>Update Profile</h1>
-            <form onSubmit={formSubmit} className='flex flex-col justify-center px-4 lg:px-56'>
-                <label>Name</label>
-                <input type='text' name="name" value={info.name} onChange={handleChange} className='w-96' />
-                <label>Email</label>
-                <input type='email' name="email" value={info.email} onChange={handleChange} className='w-96' />
-                <label>Mobile</label>
-                <input type='number' name="mobile" value={info.mobile} onChange={handleChange} className='w-96' />
-                <label>Address</label>
-                <input type='text' name="address" value={info.address} onChange={handleChange} className='w-96' />
-
-                <label>Password</label>
-                <input type='password' name="password" value={info.password} onChange={handleChange} className='w-96' />
-
-                <label className="block text-sm font-medium leading-6 text-gray-700">
-                    Profile Picture
-                </label>
-                <input
-                    type="file"
-                    onChange={(e) => onUpload(e.target.files[0])}
-                    name="profile-pic"
-                    id="profile-pic"
-                />
-                <img src={file} alt="profile" className='h-40 w-40' />
-                <button type='submit' className='text-bold bg-gray-200 w-32 border-gray-400 rounded my-10 p-2 hover:bg-gray-300'>Update</button>
+            <h1 className='text-3xl font-bold mb-6 text-center'>Update Profile</h1>
+            <form onSubmit={formSubmit} className='flex flex-col px-4 lg:px-56 gap-4'>
+                <div className='flex mb-4 flex-row gap-2'>
+                    <label htmlFor="name" className='text-lg font-medium mb-2'>Name</label>
+                    <input type='text' id="name" name="name" value={info.name} onChange={handleChange} className='w-96 border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300' />
+                </div>
+                <div className='flex mb-4 flex-row gap-2'>
+                    <label htmlFor="email" className='text-lg font-medium mb-2'>Email</label>
+                    <input type='email' id="email" name="email" value={info.email} onChange={handleChange} className='w-96 border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300' />
+                </div>
+                <div className='flex mb-4 flex-row gap-2'>
+                    <label htmlFor="mobile" className='text-lg font-medium mb-2'>Mobile</label>
+                    <input type='number' id="mobile" name="mobile" value={info.mobile} onChange={handleChange} className='w-96 border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300' />
+                </div>
+                <div className='flex mb-4 flex-row gap-2'>
+                    <label htmlFor="address" className='text-lg font-medium mb-2'>Address</label>
+                    <input type='text' id="address" name="address" value={info.address} onChange={handleChange} className='w-96 border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300' />
+                </div>
+                <div className='flex mb-4 flex-row gap-2'>
+                    <label htmlFor="password" className='text-lg font-medium mb-2'>Password</label>
+                    <input type='password' id="password" name="password" value={info.password} onChange={handleChange} className='w-96 border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-300' />
+                </div>
+                <div className='mb-4'>
+                    <label htmlFor="profile-pic" className='block text-lg font-medium mb-2 hover:cursor-pointer' for='profile-pic'>Upload Image: <Image /></label>
+                    <input type="file" onChange={(e) => onUpload(e.target.files[0])} name="profile-pic" id="profile-pic" className='hidden' />
+                    <img src={file} alt="profile" className='h-40 w-40 mt-4 rounded-md' />
+                </div>
+                <button type='submit' className='text-white font-bold bg-blue-500 w-32 border-blue-500 rounded-md my-6 py-2 hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300'>
+                    Update
+                </button>
             </form>
         </div>
-    )
+    );
+
 }
 
 export default UpdateProfile

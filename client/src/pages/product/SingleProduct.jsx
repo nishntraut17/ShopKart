@@ -2,18 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { addToCart, setOpen } from '../../features/cart/cartSlice';
+import { addToCart, setOpen } from '../../redux/reducers/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { Rating, IconButton, Menu, MenuItem } from "@mui/material";
-import ComponentLoading from "../../components/loading/ComponentLoading";
-import SameCategory from '../../components/Product/SameCategory';
+import ComponentLoading from "../../components/ComponentLoading";
+import SameCategory from '../../components/SameCategory';
 import { Avatar as MuiAvatar } from '@mui/material';
-import ProductFeature from '../../static/productFeature.png';
-import Brand from "../../static/brand.png";
-import TopBrand from '../../static/topbrand.png';
+import ProductFeature from '../../assets/productFeature.png';
+import Brand from "../../assets/brand.png";
+import TopBrand from '../../assets/topbrand.png';
 import { MoreVert } from "@mui/icons-material";
-import { selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../../redux/reducers/authSlice";
 
 const SingleProduct = () => {
     const navigate = useNavigate();
@@ -41,30 +41,35 @@ const SingleProduct = () => {
     };
 
     const handleDelete = async (req, res) => {
-        const confirm = window.confirm("Are you sure you want to Delete?");
-        if (confirm) {
-            await toast.promise(
-                axios.delete(
-                    `http://localhost:5000/api/product/${id}`,
-                    {
-                        headers: {
-                            'authorization': `Bearer ${localStorage.getItem("token")}`,
-                        },
-                    }
-                ),
+        await toast.promise(
+            axios.delete(
+                `http://localhost:5000/api/product/${id}`,
                 {
-                    success: "Product Deleted Successfully",
-                    error: "Unable to Delete",
-                    loading: "please wait...",
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`,
+                    },
                 }
-            );
-        }
+            ),
+            axios.delete(
+                `http://localhost:5000/api/order/${id}`,
+                {
+                    headers: {
+                        'authorization': `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            ),
+            {
+                success: "Product Deleted Successfully",
+                error: "Unable to Delete",
+                loading: "please wait...",
+            }
+        );
     }
 
     const handleMenuDelete = () => {
         if (window.confirm("Are you sure you want to delete?")) {
             handleDelete();
-            navigate("/product");
+            navigate("/");
         }
         setAnchorEl(null);
     };
@@ -194,12 +199,12 @@ const SingleProduct = () => {
                 {product?.comments?.map((comment, i) => (
                     <div className='flex flex-row border-2 border-gray-200 rounded-xl gap-4 p-2 lg:ml-24 items-center'>
                         <MuiAvatar
-                            alt={comment?.user?.name}
-                            src={comment?.user?.profileImage}
+                            alt={comment?.user?.name ? comment?.user?.name : "Unknown User"}
+                            src={comment?.user?.profileImage ? comment?.user?.productImage : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
                             sx={{ width: 30, height: 30 }}
                             className="border-2"
                         />
-                        <p>{comment?.user?.name}</p>
+                        <p>{comment?.user?.name ? comment?.user?.name : "Unknown User"}</p>
                         <Rating
                             size={"small"}
                             precision={0.25}

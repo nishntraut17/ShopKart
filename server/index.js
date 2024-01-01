@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require('cors');
-const stripe = require("stripe")("sk_test_51NEub8SEzFQ88XP6F2MPAxQsgEsIbFOdpsFyZqvk1Q88VxCeYjltcNBTtyRM9LfjejCl4FBvaKfV4ySTW331YTO400EUt6pInl")
 require("dotenv").config();
 require("./db/conn");
+const stripe = require("stripe")(process.env.STRIPE_KEY)
 
 const userRouter = require('./routes/users');
 const productRouter = require('./routes/products');

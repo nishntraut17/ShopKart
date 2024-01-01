@@ -28,7 +28,7 @@ const register = async (req, res) => {
         if (!result) {
             return res.status(500).send("Unable to register user 1");
         }
-        return res.status(201).send("User registered successfully");
+        return res.status(201).send({ message: "User registered successfully" });
     } catch (error) {
         console.log(error);
         res.status(500).send("Unable to register user");

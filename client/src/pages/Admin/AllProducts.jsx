@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import ComponentLoading from '../../components/loading/ComponentLoading';
-import NoData from "../../components/noData/NoData";
+import ComponentLoading from '../../components/ComponentLoading';
+import NoData from "../../components/NoData";
 import { Link } from "react-router-dom";
 
 const AllProducts = () => {
@@ -36,6 +36,14 @@ const AllProducts = () => {
                             },
                         }
                     ),
+                    axios.delete(
+                        `http://localhost:5000/api/order/${userId}`,
+                        {
+                            headers: {
+                                'authorization': `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        }
+                    ),
                     {
                         success: "Product Deleted Successfully",
                         error: "Unable to Delete",
@@ -58,7 +66,7 @@ const AllProducts = () => {
             {loading ? (
                 <ComponentLoading />
             ) : (
-                <section className="">
+                <section className="overflow-auto scrollbar-hide max-h-[800px]">
                     <h3 className="bg-[#f4f4f4] p-4 border-gray-200 ">All Products</h3>
                     {products.length > 0 ? (
                         <table className="text-gray-600 border-gray-200">
@@ -77,7 +85,7 @@ const AllProducts = () => {
                             <tbody>
                                 {products?.map((ele, i) => {
                                     return (
-                                        <tr key={ele?._id}>
+                                        <tr key={ele?._id} className="">
                                             <td className="px-4 py-2">{i + 1}</td>
                                             <td className="px-4 py-2">
                                                 <Link to={`/product/${ele?._id}`}>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Card from "../../components/Card/Card"
-import ComponentLoading from '../../components/loading/ComponentLoading';
+import Card from "../../components/Card"
+import ComponentLoading from '../../components/ComponentLoading';
 import { Slider } from '@mui/material';
-import NoData from '../../components/noData/NoData';
+import NoData from '../../components/NoData';
 
 const ProductsPage = () => {
     const [products, setProducts] = useState([]);
@@ -19,9 +19,7 @@ const ProductsPage = () => {
 
     const categoryOptions = [
         'Mobile',
-        'Television',
         'Laptop',
-        'Desktop',
         'Tablets',
         'Headphones',
         'Smart Watches',
@@ -125,6 +123,7 @@ const ProductsPage = () => {
                             />
                         </div>
                     </div>
+                    <label>Sort data: </label>
                     <select id='sortingFilter' value={selectedSorting} onChange={handleSortingChange} className='h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-auto'>
                         <option value=''>Default</option>
                         {sortingFilters.map((sortingFilter, index) => (

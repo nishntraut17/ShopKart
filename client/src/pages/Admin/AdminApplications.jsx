@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import ComponentLoading from '../../components/loading/ComponentLoading';
-import NoData from "../../components/noData/NoData";
+import ComponentLoading from '../../components/ComponentLoading';
+import NoData from "../../components/NoData";
 
 const AdminApplications = () => {
     const [applications, setApplications] = useState([]);

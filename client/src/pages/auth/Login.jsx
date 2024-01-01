@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../../features/auth/authSlice";
+import { setUserInfo } from "../../redux/reducers/authSlice";
 import { jwtDecode } from "jwt-decode";
-import { useSignInMutation } from '../../features/auth/authApiSlice';
-import OnlyLogoTransparent from '../../static/OnlyLogoTransparent.png';
-import ComponentLoading from '../../components/loading/ComponentLoading';
+import OnlyLogoTransparent from '../../assets/OnlyLogoTransparent.png';
+import ComponentLoading from '../../components/ComponentLoading';
+import axios from 'axios';
 
 export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [signIn] = useSignInMutation();
     const [loading, setLoading] = useState(false);
 
     const [formDetails, setFormDetails] = useState({
@@ -37,18 +36,20 @@ export default function Login() {
                 return toast.error("Password must be at least 5 characters long");
             }
 
-            const userData = await toast.promise(
-                signIn({ email, password }).unwrap(),
+            const { data } = await toast.promise(
+                axios.post("http://localhost:5000/api/user/login", {
+                    email, password
+                }),
                 {
-                    pending: "Please wait...",
-                    success: "Sign in successful",
-                    error: "Sign in failed",
+                    success: "SignUp successfully",
+                    error: "Unable to Register",
+                    loading: "Signing up user...",
                 }
-            );
+            )
 
-            localStorage.setItem("token", userData.token);
-            dispatch(setUserInfo(jwtDecode(userData.token)));
-            console.log(jwtDecode(userData.token));
+            localStorage.setItem("token", data.token);
+            dispatch(setUserInfo(jwtDecode(data.token)));
+            console.log(jwtDecode(data.token));
             setLoading(false);
             return navigate("/");
         }
