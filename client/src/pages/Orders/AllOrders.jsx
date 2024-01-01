@@ -18,7 +18,7 @@ const AllOrders = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get("http://localhost:5000/api/order", {
+                const response = await axios.get("https://shopkart-backend-ko76.onrender.com/api/order", {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
@@ -44,21 +44,21 @@ const AllOrders = () => {
     const handleRatingReviewSubmit = async () => {
 
         await toast.promise(
-            axios.put(`http://localhost:5000/api/product/rate/${selectedOrder.product._id}`, {
+            axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/rate/${selectedOrder.product._id}`, {
                 rating,
             }, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }),
-            axios.put(`http://localhost:5000/api/product/comment/${selectedOrder.product._id}`, {
+            axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/comment/${selectedOrder.product._id}`, {
                 comment: review,
             }, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }),
-            axios.put(`http://localhost:5000/api/order/${selectedOrder._id}`, {
+            axios.put(`https://shopkart-backend-ko76.onrender.com/api/order/${selectedOrder._id}`, {
                 disableReview: true,
             }, {
                 headers: {

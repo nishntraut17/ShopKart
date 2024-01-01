@@ -24,7 +24,7 @@ const BecomeASeller = () => {
         }
         await toast.promise(
 
-            axios.put(`http://localhost:5000/api/user/seller/${user.userId}`, {
+            axios.put(`https://shopkart-backend-ko76.onrender.com/api/user/seller/${user.userId}`, {
                 role: 'pseudoSeller'
             }, {
                 headers: {

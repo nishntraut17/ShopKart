@@ -74,7 +74,7 @@ const ProductsPage = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get('http://localhost:5000/api/product/');
+                const response = await axios.get('https://shopkart-backend-ko76.onrender.com/api/product/');
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

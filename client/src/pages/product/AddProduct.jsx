@@ -90,7 +90,7 @@ function AddProduct() {
             const { name, price, description, brand } = formDetails;
             console.log(formDetails);
             const response = await toast.promise(
-                axios.post('http://localhost:5000/api/product', {
+                axios.post('https://shopkart-backend-ko76.onrender.com/api/product', {
                     name,
                     price,
                     description,

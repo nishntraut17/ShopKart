@@ -30,7 +30,7 @@ function AddProduct() {
     setLoading(true)
     const getUser = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/product/${id}`, {
+        const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/${id}`, {
           headers: {
             'authorization': `Bearer ${localStorage.getItem("token")}`
           }
@@ -116,7 +116,7 @@ function AddProduct() {
       const { name, price, description, brand, category } = formDetails;
       console.log(formDetails);
       const response = await toast.promise(
-        axios.put(`http://localhost:5000/api/product/${id}`, {
+        axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/${id}`, {
           name,
           price,
           description,

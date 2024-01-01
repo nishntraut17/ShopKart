@@ -12,7 +12,7 @@ const AllProducts = () => {
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('http://localhost:5000/api/product/', {
+            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/product/', {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -29,7 +29,7 @@ const AllProducts = () => {
             if (confirm) {
                 await toast.promise(
                     axios.delete(
-                        `http://localhost:5000/api/product/${userId}`,
+                        `https://shopkart-backend-ko76.onrender.com/api/product/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -37,7 +37,7 @@ const AllProducts = () => {
                         }
                     ),
                     axios.delete(
-                        `http://localhost:5000/api/order/${userId}`,
+                        `https://shopkart-backend-ko76.onrender.com/api/order/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,

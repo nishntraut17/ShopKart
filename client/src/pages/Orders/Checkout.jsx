@@ -17,7 +17,7 @@ const CheckoutPage = () => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/user/${user.userId}`, {
+                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${user.userId}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
@@ -61,7 +61,7 @@ const CheckoutPage = () => {
             const headers = {
                 "Content-Type": "application/json"
             }
-            const response = await fetch("http://localhost:5000/api/create-checkout-session", {
+            const response = await fetch("https://shopkart-backend-ko76.onrender.com/api/create-checkout-session", {
                 method: "POST",
                 headers: headers,
                 mode: "cors",
@@ -70,7 +70,7 @@ const CheckoutPage = () => {
             )
             const session = await response.json();
 
-            await axios.post("http://localhost:5000/api/order", {
+            await axios.post("https://shopkart-backend-ko76.onrender.com/api/order", {
                 orderItems
             },
                 {

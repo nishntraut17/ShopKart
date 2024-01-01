@@ -10,7 +10,7 @@ const Profile = () => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/user/${id}`, {
+                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }

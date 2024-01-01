@@ -21,7 +21,7 @@ const UpdateProfile = () => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/user/${id}`, {
+                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
@@ -79,7 +79,7 @@ const UpdateProfile = () => {
 
             await toast.promise(
 
-                axios.put(`http://localhost:5000/api/user/${id}`, {
+                axios.put(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
                     name, email, password, address, mobile, profileImage: file
                 }, {
                     headers: {

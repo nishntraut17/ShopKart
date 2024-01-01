@@ -43,7 +43,7 @@ const SingleProduct = () => {
     const handleDelete = async (req, res) => {
         await toast.promise(
             axios.delete(
-                `http://localhost:5000/api/product/${id}`,
+                `https://shopkart-backend-ko76.onrender.com/api/product/${id}`,
                 {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -51,7 +51,7 @@ const SingleProduct = () => {
                 }
             ),
             axios.delete(
-                `http://localhost:5000/api/order/${id}`,
+                `https://shopkart-backend-ko76.onrender.com/api/order/${id}`,
                 {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -84,7 +84,7 @@ const SingleProduct = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:5000/api/product/${id}`);
+                const response = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/${id}`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

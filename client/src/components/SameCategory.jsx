@@ -18,7 +18,7 @@ export default function SameCategory({ category, prod }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`http://localhost:5000/api/product/category/${category}`);
+                const response = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/category/${category}`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

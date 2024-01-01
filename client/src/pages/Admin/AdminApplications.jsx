@@ -11,7 +11,7 @@ const AdminApplications = () => {
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('http://localhost:5000/api/user', {
+            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/user', {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -30,7 +30,7 @@ const AdminApplications = () => {
             if (confirm) {
                 await toast.promise(
                     axios.put(
-                        `http://localhost:5000/api/user/applicationupdate/${userId}`,
+                        `https://shopkart-backend-ko76.onrender.com/api/user/applicationupdate/${userId}`,
                         { role: 'seller' },
                         {
                             headers: {
@@ -57,7 +57,7 @@ const AdminApplications = () => {
             if (confirm) {
                 await toast.promise(
                     axios.put(
-                        `http://localhost:5000/api/user/applicationupdate/${userId}`,
+                        `https://shopkart-backend-ko76.onrender.com/api/user/applicationupdate/${userId}`,
                         { role: 'consumer' },
                         {
                             headers: {

@@ -15,7 +15,7 @@ const AllUsers = () => {
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('http://localhost:5000/api/user/', {
+            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/user/', {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -34,7 +34,7 @@ const AllUsers = () => {
             if (confirm) {
                 await toast.promise(
                     axios.delete(
-                        `http://localhost:5000/api/user/${userId}`,
+                        `https://shopkart-backend-ko76.onrender.com/api/user/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,
