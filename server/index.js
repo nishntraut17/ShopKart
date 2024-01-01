@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://shopkart-ecommerce-app.netlify.app'],
+    origin: ['http://localhost:3000', 'https://shopkart-ecommerce-app.netlify.app', 'https://shopkart-ecommerce.onrender.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
@@ -38,8 +38,8 @@ app.post('/api/create-checkout-session', async (req, res) => {
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        success_url: "https://shopkart-ecommerce-app.netlify.app/orders/success",
-        cancel_url: "https://shopkart-ecommerce-app.netlify.app",
+        success_url: "https://shopkart-ecommerce.onrender.com/orders/success",
+        cancel_url: "https://shopkart-ecommerce.onrender.com",
     })
     console.log(session);
 
