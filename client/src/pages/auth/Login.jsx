@@ -12,6 +12,7 @@ export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const [formDetails, setFormDetails] = useState({
         email: '',
@@ -37,7 +38,7 @@ export default function Login() {
             }
 
             const { data } = await toast.promise(
-                axios.post("https://shopkart-backend-ko76.onrender.com/api/user/login", {
+                axios.post(`${backendUrl}/user/login`, {
                     email, password
                 }),
                 {

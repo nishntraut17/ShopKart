@@ -12,12 +12,13 @@ const CheckoutPage = () => {
     const cartItems = useSelector((state) => state.cart.items);
     const [user] = useState(useSelector(selectCurrentUser));
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${user.userId}`, {
+                const { data } = await axios.get(`${backendUrl}/user/${user.userId}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
@@ -61,7 +62,7 @@ const CheckoutPage = () => {
             const headers = {
                 "Content-Type": "application/json"
             }
-            const response = await fetch("https://shopkart-backend-ko76.onrender.com/api/create-checkout-session", {
+            const response = await fetch(`${backendUrl}/create-checkout-session`, {
                 method: "POST",
                 headers: headers,
                 mode: "cors",
@@ -70,7 +71,7 @@ const CheckoutPage = () => {
             )
             const session = await response.json();
 
-            await axios.post("https://shopkart-backend-ko76.onrender.com/api/order", {
+            await axios.post(`${backendUrl}/order`, {
                 orderItems
             },
                 {

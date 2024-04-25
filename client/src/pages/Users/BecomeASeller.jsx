@@ -13,6 +13,7 @@ const BecomeASeller = () => {
     const user = useSelector(selectCurrentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
     };
@@ -24,7 +25,7 @@ const BecomeASeller = () => {
         }
         await toast.promise(
 
-            axios.put(`https://shopkart-backend-ko76.onrender.com/api/user/seller/${user.userId}`, {
+            axios.put(`${backendUrl}/user/seller/${user.userId}`, {
                 role: 'pseudoSeller'
             }, {
                 headers: {

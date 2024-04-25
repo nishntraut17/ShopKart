@@ -11,11 +11,12 @@ const AllUsers = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const currentUser = useSelector(selectCurrentUser);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/user/', {
+            const { data } = await axios.get(`${backendUrl}/user/`, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -34,7 +35,7 @@ const AllUsers = () => {
             if (confirm) {
                 await toast.promise(
                     axios.delete(
-                        `https://shopkart-backend-ko76.onrender.com/api/user/${userId}`,
+                        `${backendUrl}/user/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -56,6 +57,7 @@ const AllUsers = () => {
 
     useEffect(() => {
         getAllApp();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

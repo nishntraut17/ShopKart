@@ -54,7 +54,7 @@ function App() {
             <Route path="/orders/checkout" element={<Protected><Checkout /></Protected>} />
             <Route path="/product" element={<Public><ProductsPage /></Public>} />
             <Route path='/orders' element={<Protected><AllOrders /></Protected>} />
-            <Route path='/orders/success' element={<Protected><Success /></Protected>} />
+            <Route path='/success' element={<Protected><Success /></Protected>} />
             <Route path="/profile/:id" element={<Protected><Profile /></Protected>} />
             <Route path='/profile/updateprofile/:id' element={<Protected><UpdateProfile /></Protected>} />
             <Route path='/seller' element={<Protected><BecomeASeller /></Protected>} />

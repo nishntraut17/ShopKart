@@ -16,12 +16,13 @@ const UpdateProfile = () => {
     const navigate = useNavigate();
     const [file, setFile] = useState("");
     const [info, setInfo] = useState({});
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
+                const { data } = await axios.get(`${backendUrl}/user/${id}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
@@ -43,7 +44,7 @@ const UpdateProfile = () => {
             }
         }
         getUser();
-    }, [id, setInfo]);
+    }, [id, setInfo, backendUrl]);
 
     const onUpload = async (element) => {
         setLoading(true);
@@ -79,7 +80,7 @@ const UpdateProfile = () => {
 
             await toast.promise(
 
-                axios.put(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
+                axios.put(`${backendUrl}/user/${id}`, {
                     name, email, password, address, mobile, profileImage: file
                 }, {
                     headers: {

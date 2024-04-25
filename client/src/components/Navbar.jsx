@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from "../redux/reducers/authSlice";
 import { setOpen, itemCount } from "../redux/reducers/cartSlice";
 import { ShoppingCart } from "@mui/icons-material";
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
 import Menu from "./Menu";
 import LogoWithNameTransparent from "../assets/LogoWithNameTransparent.png";
 
-const Header = () => {
+const Navbar = () => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
@@ -25,6 +26,14 @@ const Header = () => {
                 <NavLink to='/'>
                     <img src={LogoWithNameTransparent} alt="logo" className="h-14 w-22" />
                 </NavLink>
+                {/* <div className="w-96">
+                    <input
+                        type="text"
+                        value={""}
+                        className="focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-full"
+                        placeholder={`Search Products...`}
+                    />
+                </div> */}
                 {/* Desktop navbar */}
                 <nav className="hidden md:block">
                     {/* Navbar links */}
@@ -45,26 +54,20 @@ const Header = () => {
                                 All Products
                             </NavLink>
                         </li>
-                        {token && (
-                            <li>
-                                <NavLink
-                                    to={"/orders"}
-                                    className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
-                                >
-                                    Orders
-                                </NavLink>
-                            </li>
-                        )}
+
                         {token && user.role === 'consumer' && (
                             <li>
                                 <NavLink
                                     to={"/seller"}
                                     className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
                                 >
+                                    <StorefrontIcon />
+                                    {" "}
                                     Become a seller
                                 </NavLink>
                             </li>
                         )}
+
                         {token && user.role === 'admin' && (
                             <li>
                                 <NavLink
@@ -75,6 +78,15 @@ const Header = () => {
                                 </NavLink>
                             </li>
                         )}
+                        {token && (
+                            <li>
+                                <button onClick={() => dispatch(setOpen(true))} >
+                                    < ShoppingCart className="hover:cursor-pointer text-gray-600" />
+                                    {" "}
+                                    Cart
+                                </button>
+                            </li>
+                        )}
                     </ul>
                 </nav>
                 <CartBox />
@@ -83,7 +95,7 @@ const Header = () => {
                     <div className="relative">
                         <p className="absolute left-5 text-slate-400 hover:cursor-pointer">{cnt}</p>
                         <div className="flex flex-row gap-2 items-center">
-                            < ShoppingCart onClick={() => dispatch(setOpen(true))} className="hover:cursor-pointer text-gray-600" />
+
                             <Avatar />
                         </div>
                     </div>
@@ -92,11 +104,6 @@ const Header = () => {
                         to={"/auth/login"}
                         className="hidden md:block"
                     >
-                        {/* <Button
-                            content={"Sign In"}
-                            customCss={"max-w-max rounded-full"}
-                            icon={<FiLogIn />}
-                        /> */}
                         <div className="flex flex-row items-center justify-center gap-1 hover:scale-105">
 
                             <button>Login</button>
@@ -121,4 +128,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Navbar;

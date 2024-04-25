@@ -16,6 +16,7 @@ function AddProduct() {
         brand: "",
         description: ""
     });
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const handleCategoryChange = (event) => {
         setSelectedCategory(event.target.value);
@@ -90,7 +91,7 @@ function AddProduct() {
             const { name, price, description, brand } = formDetails;
             console.log(formDetails);
             const response = await toast.promise(
-                axios.post('https://shopkart-backend-ko76.onrender.com/api/product', {
+                axios.post(`${backendUrl}/product`, {
                     name,
                     price,
                     description,

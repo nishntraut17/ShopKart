@@ -14,11 +14,12 @@ const AllOrders = () => {
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState("");
     const [isModalOpen, setModalOpen] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get("https://shopkart-backend-ko76.onrender.com/api/order", {
+                const response = await axios.get(`${backendUrl}/order`, {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
@@ -32,7 +33,7 @@ const AllOrders = () => {
             }
         }
         fetchData();
-    }, [setSelectedOrder, orders]);
+    }, [setSelectedOrder, orders, backendUrl]);
     const handleRatingChange = (val) => {
         setRating(val);
     };
@@ -44,21 +45,21 @@ const AllOrders = () => {
     const handleRatingReviewSubmit = async () => {
 
         await toast.promise(
-            axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/rate/${selectedOrder.product._id}`, {
+            axios.put(`${backendUrl}/product/rate/${selectedOrder.product._id}`, {
                 rating,
             }, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }),
-            axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/comment/${selectedOrder.product._id}`, {
+            axios.put(`${backendUrl}/product/comment/${selectedOrder.product._id}`, {
                 comment: review,
             }, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }),
-            axios.put(`https://shopkart-backend-ko76.onrender.com/api/order/${selectedOrder._id}`, {
+            axios.put(`${backendUrl}/order/${selectedOrder._id}`, {
                 disableReview: true,
             }, {
                 headers: {
@@ -84,7 +85,7 @@ const AllOrders = () => {
     return (
 
         <div className="flex flex-col px-32 py-16">
-            {orders.length && <table className="min-w-full divide-y divide-gray-200">
+            {orders.length > 0 && <table className="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
                         <th className="py-3">Image</th>
@@ -97,7 +98,7 @@ const AllOrders = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {orders.length && orders.map((item, i) => (
+                    {orders.length > 0 && orders.map((item, i) => (
                         <tr key={i} className="mb-4">
                             <td className=''>
                                 <Link to={`/product/${item?.product?._id}`}>
@@ -130,7 +131,7 @@ const AllOrders = () => {
                     ))}
                 </tbody>
             </table>}
-            {!orders.length && <NoData text={"Orders"} />}
+            {orders.length === 0 && <NoData text={"Orders"} />}
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setModalOpen(false)}

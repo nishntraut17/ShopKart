@@ -8,6 +8,8 @@ import PageLoading from '../../components/PageLoading';
 export default function Signup() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
 
     const [formDetails, setFormDetails] = useState({
         name: "",
@@ -35,7 +37,7 @@ export default function Signup() {
             }
 
             await toast.promise(
-                axios.post("https://shopkart-backend-ko76.onrender.com/api/user/register", {
+                axios.post(`${backendUrl}/user/register`, {
                     name, email, password
                 }),
                 {

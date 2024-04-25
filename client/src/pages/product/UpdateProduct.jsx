@@ -13,6 +13,7 @@ function AddProduct() {
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [formDetails, setFormDetails] = useState({});
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const categoryOptions = [
     'Mobile',
@@ -30,7 +31,7 @@ function AddProduct() {
     setLoading(true)
     const getUser = async () => {
       try {
-        const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/${id}`, {
+        const { data } = await axios.get(`${backendUrl}/product/${id}`, {
           headers: {
             'authorization': `Bearer ${localStorage.getItem("token")}`
           }
@@ -53,7 +54,7 @@ function AddProduct() {
       }
     }
     getUser();
-  }, [id]);
+  }, [backendUrl, id, selectedCategory]);
 
   const handleImageChange = (elements) => {
     const newPreviews = Array.from(elements).map(element => {
@@ -116,7 +117,7 @@ function AddProduct() {
       const { name, price, description, brand, category } = formDetails;
       console.log(formDetails);
       const response = await toast.promise(
-        axios.put(`https://shopkart-backend-ko76.onrender.com/api/product/${id}`, {
+        axios.put(`${backendUrl}/product/${id}`, {
           name,
           price,
           description,

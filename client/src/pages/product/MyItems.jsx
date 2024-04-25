@@ -19,6 +19,7 @@ const ProductsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [value, setValue] = useState([0, 150000]);
     const [selectedSorting, setSelectedSorting] = useState('');
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const sortingFilters = ["Price- High to Low", "Price- Low to High", "Product Name- A to Z", "Product Name- Z to A"]
 
@@ -74,7 +75,7 @@ const ProductsPage = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get('https://shopkart-backend-ko76.onrender.com/api/product/');
+                const response = await axios.get(`${backendUrl}/product/`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -89,7 +90,7 @@ const ProductsPage = () => {
             }
         }
         fetchData();
-    }, []);
+    }, [backendUrl, currentUser.userId]);
 
     if (loading) {
         return <ComponentLoading />

@@ -7,11 +7,12 @@ import NoData from "../../components/NoData";
 const AdminApplications = () => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/user', {
+            const { data } = await axios.get(`${backendUrl}/user`, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -30,7 +31,7 @@ const AdminApplications = () => {
             if (confirm) {
                 await toast.promise(
                     axios.put(
-                        `https://shopkart-backend-ko76.onrender.com/api/user/applicationupdate/${userId}`,
+                        `${backendUrl}/user/applicationupdate/${userId}`,
                         { role: 'seller' },
                         {
                             headers: {
@@ -57,7 +58,7 @@ const AdminApplications = () => {
             if (confirm) {
                 await toast.promise(
                     axios.put(
-                        `https://shopkart-backend-ko76.onrender.com/api/user/applicationupdate/${userId}`,
+                        `${backendUrl}/user/applicationupdate/${userId}`,
                         { role: 'consumer' },
                         {
                             headers: {
@@ -80,7 +81,8 @@ const AdminApplications = () => {
 
     useEffect(() => {
         getAllApp();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [backendUrl]);
 
     return (
         <>

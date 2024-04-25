@@ -21,6 +21,7 @@ import { IoAdd } from "react-icons/io5";
 import { FaShopify } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 import { selectCurrentUser, setUserInfo } from "../redux/reducers/authSlice";
 import { useSelector } from "react-redux";
 
@@ -112,7 +113,19 @@ const Avatar = () => {
                         Profile
                     </Link>
                 </MenuItem>
-                {console.log(user)}
+                {
+                    <MenuItem>
+                        <Link
+                            to="/orders"
+                            className="flex items-center"
+                        >
+                            <ListItemIcon>
+                                <LocalMallIcon />
+                            </ListItemIcon>
+                            My Orders
+                        </Link>
+                    </MenuItem>
+                }
                 {(user.role === 'seller' || user.role === 'admin') && (
                     <Box>
                         <Divider />

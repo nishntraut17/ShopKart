@@ -8,11 +8,12 @@ import { Link } from "react-router-dom";
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     const getAllApp = async (e) => {
         try {
             setLoading(true)
-            const { data } = await axios.get('https://shopkart-backend-ko76.onrender.com/api/product/', {
+            const { data } = await axios.get(`${backendUrl}/product/`, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -29,7 +30,7 @@ const AllProducts = () => {
             if (confirm) {
                 await toast.promise(
                     axios.delete(
-                        `https://shopkart-backend-ko76.onrender.com/api/product/${userId}`,
+                        `${backendUrl}/product/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -37,7 +38,7 @@ const AllProducts = () => {
                         }
                     ),
                     axios.delete(
-                        `https://shopkart-backend-ko76.onrender.com/api/order/${userId}`,
+                        `${backendUrl}/order/${userId}`,
                         {
                             headers: {
                                 'authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -59,6 +60,7 @@ const AllProducts = () => {
 
     useEffect(() => {
         getAllApp();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -15,10 +15,11 @@ export default function SameCategory({ category, prod }) {
         slidesToShow: 6,
         slidesToScroll: 1
     };
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/category/${category}`);
+                const response = await axios.get(`${backendUrl}/api/product/category/${category}`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -35,7 +36,14 @@ export default function SameCategory({ category, prod }) {
             }
         }
         fetchData();
-    }, [category, prod]);
+    }, [backendUrl, category, prod]);
+
+    const handleClick = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
 
     if (loading) {
         return <p>Loading...</p>;
@@ -48,8 +56,8 @@ export default function SameCategory({ category, prod }) {
 
                 <Slider {...settings}>
                     {products.map((item, i) => (
-                        <Link to={`/product/${item._id}`}>
-                            <div key={i} className="bg-white rounded-lg border-2 flex flex-col items-center justify-center gap-1 p-1 hover:scale-105">
+                        <Link to={`/product/${item._id}`} key={i}>
+                            <div className="bg-white rounded-lg border-2 flex flex-col items-center justify-center gap-1 p-1 hover:scale-105" onClick={handleClick}>
                                 <div className="overflow-hidden border rounded-lg hover:opacity-75 w-48 h-48">
                                     <img
                                         src={item.productImages[0]}

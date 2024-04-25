@@ -84,11 +84,11 @@ export default function CartBox() {
 
                                             <div className="mt-8">
                                                 <div className="flow-root">
-                                                    <ul role="list" className="-my-6 divide-y divide-gray-200">
+                                                    <p role="list" className="-my-6 divide-y divide-gray-200">
                                                         {cartItems.map((product) => (
                                                             <CartBoxItem item={product} id={product._id} name={product.name} brand={product.brand} quantity={product.quantity} price={product.price} image={product.productImages[0]} onRemove={handleRemoveFromCart} onRemoveOneQuantity={handleRemoveSingleItem} onAddOneQuantity={handleAddSingleQuantity} />
                                                         ))}
-                                                    </ul>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>

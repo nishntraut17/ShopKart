@@ -6,11 +6,13 @@ const Profile = () => {
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
     useEffect(() => {
         setLoading(true)
         const getUser = async () => {
             try {
-                const { data } = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/user/${id}`, {
+                const { data } = await axios.get(`${backendUrl}/user/${id}`, {
                     headers: {
                         'authorization': `Bearer ${localStorage.getItem("token")}`
                     }
@@ -25,7 +27,7 @@ const Profile = () => {
             }
         }
         getUser();
-    }, [id]);
+    }, [backendUrl, id]);
 
     if (loading) {
         return <ComponentLoading />
