@@ -5,7 +5,7 @@ import axios from 'axios';
 import OnlyLogoTransparent from '../../assets/OnlyLogoTransparent.png';
 import PageLoading from '../../components/PageLoading';
 
-export default function Signup() {
+export default function Register() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const backendUrl = process.env.REACT_APP_BACKEND_URL;

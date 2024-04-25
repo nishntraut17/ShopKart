@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://shopkart-ecommerce-app.netlify.app', 'https://shopkart-ecommerce.onrender.com'],
+    origin: [process.env.FRONT_END_URL, "http://localhost:3000"],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));

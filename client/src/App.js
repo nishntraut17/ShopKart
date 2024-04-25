@@ -30,7 +30,7 @@ const DashboardLayout = lazy(() => import('./pages/Admin/DashboardLayout'));
 
 const AddProduct = lazy(() => import("./pages/product/AddProduct"));
 const Login = lazy(() => import('./pages/Auth/Login'));
-const Signup = lazy(() => import('./pages/Auth/Signup'));
+const Register = lazy(() => import('./pages/Auth/Register'));
 
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
       <Suspense fallback={<PageLoading />}>
         <Routes>
           <Route path='/auth/login' element={<Login />} />
-          <Route path='/auth/signup' element={<Public><Signup /></Public>} />
+          <Route path='/auth/signup' element={<Public><Register /></Public>} />
           <Route path="/" element={<RootLayout />}>
             <Route path='/' element={<Public><Home /></Public>} />
             <Route path='/product/addproduct' element={<Seller><AddProduct /></Seller>} />
