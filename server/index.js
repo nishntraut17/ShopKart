@@ -15,10 +15,11 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors({
-    origin: ["*"],
+    origin: "https://shopkart-93if.onrender.com",
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));
+
 
 
 app.post('/api/create-checkout-session', async (req, res) => {
