@@ -29,7 +29,7 @@ const DashboardLayout = lazy(() => import('./pages/Admin/DashboardLayout'));
 
 
 const AddProduct = lazy(() => import("./pages/product/AddProduct"));
-const Login = lazy(() => import('./pages/Auth/Login'));
+const Login = lazy(() => import('./pages/Orders/Login'));
 const Register = lazy(() => import('./pages/Orders/Register'));
 
 
