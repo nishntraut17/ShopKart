@@ -8,6 +8,7 @@ import { setUserInfo } from "../redux/reducers/authSlice";
 import { setOpen } from "../redux/reducers/cartSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from "../redux/reducers/authSlice";
+import { ShoppingCart } from "@mui/icons-material";
 
 const Menu = ({ isCollapsed, setIsCollapsed }) => {
     const dispatch = useDispatch()
@@ -82,6 +83,15 @@ const Menu = ({ isCollapsed, setIsCollapsed }) => {
                                 </li>
                             )
                         }
+                        {token && (
+                            <li>
+                                <button onClick={() => dispatch(setOpen(true))} >
+                                    <ShoppingCart className="hover:cursor-pointer text-gray-600" />
+                                    {" "}
+                                    Cart
+                                </button>
+                            </li>
+                        )}
                         {
                             token && user.role === 'admin' && (
                                 <li>

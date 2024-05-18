@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors({
-    origin: "https://shopkart-93if.onrender.com",
+    origin: "*",
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
 }));

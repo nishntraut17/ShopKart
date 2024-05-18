@@ -6,16 +6,16 @@ const Home = () => {
     return (
         <div className=''>
             <Banner />
-            <div className='px-20'>
+            <div className='px-2 md:px-20'>
                 <SmallCard category={"Mobile"} />
             </div>
-            <div className='px-20'>
+            <div className='px-2 md:px-20'>
                 <SmallCard category={"Laptop"} />
             </div>
-            <div className='px-20'>
+            <div className='px-2 md:px-20'>
                 <SmallCard category={"Headphones"} />
             </div>
-            <div className='px-20'>
+            <div className='px-2 md:px-20'>
                 <SmallCard category={"Smart Watches"} />
             </div>
         </div>

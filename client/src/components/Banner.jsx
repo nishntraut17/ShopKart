@@ -11,7 +11,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 //
 const Banner = () => {
     return (
-        <div className="relative px-20 md:block lg:h-96 hidden w-auto overflow-hidden rounded-lg">
+        <div className="relative px-4 md:px-20 h-40 md:h-72 lg:h-96 w-auto overflow-hidden rounded-lg">
             <Swiper
                 spaceBetween={30}
                 centeredSlides={true}
@@ -25,7 +25,7 @@ const Banner = () => {
                 loop={true}
 
                 modules={[Autoplay, Pagination, Navigation]}
-                className="relative px-20 h-96 w-full overflow-hidden rounded-lg"
+                className="relative md:px-20 h-40 md:h-72 lg:h-96 w-full overflow-hidden rounded-lg"
             >
                 <SwiperSlide><img src={AmazonBanner} alt='amazon banner' className='w-full h-full' /></SwiperSlide>
                 <SwiperSlide><img src={Banner2} alt='banner 2' className='w-full h-full' /></SwiperSlide>

@@ -24,7 +24,7 @@ export default function SmallCard({ category }) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get(`https://shopkart-backend-ko76.onrender.com/api/product/category/${category}`);
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/product/category/${category}`);
                 if (response.status !== 200) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

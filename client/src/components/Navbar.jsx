@@ -22,19 +22,9 @@ const Navbar = () => {
     return (
         <header className="shadow-sm sticky top-0 backdrop-blur-sm bg-[#fffefc80] z-20">
             <div className="box flex justify-between items-center py-3">
-                {/* <Logo /> */}
                 <NavLink to='/'>
                     <img src={LogoWithNameTransparent} alt="logo" className="h-14 w-22" />
                 </NavLink>
-                {/* <div className="w-96">
-                    <input
-                        type="text"
-                        value={""}
-                        className="focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-full"
-                        placeholder={`Search Products...`}
-                    />
-                </div> */}
-                {/* Desktop navbar */}
                 <nav className="hidden md:block">
                     {/* Navbar links */}
                     <ul className="flex gap-10">
@@ -54,6 +44,18 @@ const Navbar = () => {
                                 All Products
                             </NavLink>
                         </li>
+
+                        {token && (
+                            <li>
+                                <NavLink
+                                    to={"/orders"}
+                                    className="relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center font-semibold text-gray-600"
+                                >
+                                    {" "}
+                                    Orders
+                                </NavLink>
+                            </li>
+                        )}
 
                         {token && user.role === 'consumer' && (
                             <li>

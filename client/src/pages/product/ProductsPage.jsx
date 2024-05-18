@@ -9,6 +9,7 @@ import NoData from '../../components/NoData';
 const ProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState(products);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [value, setValue] = useState([0, 150000]);
@@ -54,14 +55,17 @@ const ProductsPage = () => {
     }, [selectedSorting, filteredData]);
 
     useEffect(() => {
-        const categoriesFilter = products?.filter(
+        const newFilteredData = products?.filter((element) =>
+            element.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        const categoriesFilter = newFilteredData?.filter(
             (element) => selectedCategory === '' || element.category === selectedCategory
         );
         const priceFilter = categoriesFilter?.filter(
             (element) => element.price >= value[0] && element.price <= value[1]
         );
         setFilteredData(priceFilter);
-    }, [products, selectedCategory, value]);
+    }, [searchTerm, products, selectedCategory, value]);
 
     useEffect(() => {
         async function fetchData() {
@@ -88,6 +92,15 @@ const ProductsPage = () => {
         <div className="">
             <div className="mx-auto max-w-2xl px-4 sm:px-6  lg:max-w-7xl lg:px-8">
                 <div className='flex flex-col gap-2 md:flex-row items-center md:gap-8 justify-center'>
+                    <div className="rounded-xl w-96 p-2">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="custom-input-outline focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-full"
+                            placeholder={`Search Products...`}
+                        />
+                    </div>
                     <select id="categoryFilter" value={selectedCategory} onChange={handleCategoryChange} className='h-10 focus:outline-none focus:ring focus:border-slate-100 border-1 rounded p-2 w-56'>
                         <option value="">All Categories</option>
                         {categoryOptions.map((category, index) => (

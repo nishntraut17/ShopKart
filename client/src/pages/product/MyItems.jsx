@@ -99,9 +99,8 @@ const ProductsPage = () => {
     return (
         <div className="">
             <div className="mx-auto max-w-2xl px-4 sm:px-6  lg:max-w-7xl lg:px-8">
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900 py-4">My Products</h2>
-                <div className='flex flex-row items-center gap-8 justify-center'>
-                    <div className="rounded-xl w-96">
+                <div className='flex flex-col gap-2 md:flex-row items-center md:gap-8 justify-center'>
+                    <div className="rounded-xl w-96 p-2">
                         <input
                             type="text"
                             value={searchTerm}
